@@ -1,6 +1,7 @@
 #include "chatserver.hpp"
 #include "chatservice.hpp"
 #include "logging.h"
+#include "util/config.h"
 #include <iostream>
 #include <signal.h>
 #include <memory>
@@ -23,23 +24,37 @@ int main(int argc, char** argv) {
     signal(SIGINT, handle_sigint);
     
     if (argc < 3) {
-        cerr << "command invalid! example: ./ChatServer 127.0.0.1 6000" << endl;
+        cerr << "command invalid! example: ./ChatServer 127.0.0.1 6000 [config_path]" << endl;
         exit(-1);
     }
 
     char* ip = argv[1];
     uint16_t port = atoi(argv[2]);
+    
+    std::string config_path = "config/server.conf";
+    if (argc >= 4) {
+        config_path = argv[3];
+    }
 
-    chat::ServerConfig config;
-    config.ip = ip;
-    config.port = port;
-    config.heartbeat_timeout = 30;
-    config.max_connections = 1000;
+    auto& config = chat::util::Config::instance();
+    if (!config.load(config_path)) {
+        LOG_WARN << "Failed to load config file: " << config_path << ", using defaults";
+    }
+    config.load_from_env();
+
+    chat::ServerConfig server_config;
+    server_config.ip = ip;
+    server_config.port = port;
+    server_config.heartbeat_timeout = config.get_server_config().heartbeat_timeout;
+    server_config.max_connections = config.get_server_config().max_connections;
+
+    auto& redis_config = config.get_redis_config();
+    chat::ChatService::instance()->initRedis(redis_config.host, redis_config.port);
 
     std::unique_ptr<chat::ChatServer> server = std::make_unique<chat::ChatServer>();
     g_chat_server = server.get();
     
-    if (!server->init(config)) {
+    if (!server->init(server_config)) {
         cerr << "Failed to initialize ChatServer" << endl;
         exit(-1);
     }

@@ -11,8 +11,8 @@ Redis::~Redis() {
     }
 }
 
-bool Redis::connect() {
-    _context = redisConnect("127.0.0.1", 6379);
+bool Redis::connect(const std::string& host, int port) {
+    _context = redisConnect(host.c_str(), port);
     if (_context == nullptr || _context->err) {
         if (_context) {
             LOG_ERROR << "Redis connect error: " << _context->errstr;
@@ -23,7 +23,7 @@ bool Redis::connect() {
         }
         return false;
     }
-    LOG_INFO << "Redis connected successfully";
+    LOG_INFO << "Redis connected successfully to " << host << ":" << port;
     return true;
 }
 

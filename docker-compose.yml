@@ -12,6 +12,9 @@ services:
       - ENV=production
       - MYSQL_HOST=mysql
       - MYSQL_PORT=3306
+      - MYSQL_USER=chatuser
+      - MYSQL_PASSWORD=chatpass
+      - MYSQL_DATABASE=chat
       - REDIS_HOST=redis
       - REDIS_PORT=6379
     networks:
@@ -30,6 +33,11 @@ services:
       - mysql-data:/var/lib/mysql
     networks:
       - chat-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   redis:
     image: redis:7-alpine
@@ -39,6 +47,11 @@ services:
       - redis-data:/data
     networks:
       - chat-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   mysql-data:

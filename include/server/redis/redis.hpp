@@ -12,7 +12,7 @@ public:
     Redis();
     ~Redis();
 
-    bool connect();
+    bool connect(const std::string& host = "127.0.0.1", int port = 6379);
     
     bool set(const string& key, const string& value);
     string get(const string& key);

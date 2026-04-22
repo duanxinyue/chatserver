@@ -90,6 +90,19 @@ bool Config::parse_key_value(const std::string& line, const std::string& section
     return true;
 }
 
+void Config::load_from_env() {
+    if (const char* env = std::getenv("MYSQL_HOST")) _mysql.host = env;
+    if (const char* env = std::getenv("MYSQL_PORT")) _mysql.port = std::stoi(env);
+    if (const char* env = std::getenv("MYSQL_USER")) _mysql.user = env;
+    if (const char* env = std::getenv("MYSQL_PASSWORD")) _mysql.password = env;
+    if (const char* env = std::getenv("MYSQL_DATABASE")) _mysql.database = env;
+    
+    if (const char* env = std::getenv("REDIS_HOST")) _redis.host = env;
+    if (const char* env = std::getenv("REDIS_PORT")) _redis.port = std::stoi(env);
+    
+    LOG_INFO << "Config::load_from_env - Loaded environment variables";
+}
+
 bool Config::validate() const {
     bool valid = true;
     

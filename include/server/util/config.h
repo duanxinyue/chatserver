@@ -45,6 +45,8 @@ public:
     
     bool load(const std::string& file_path);
     
+    void load_from_env();
+    
     bool validate() const;
     
     const ServerConfig& get_server_config() const { return _server; }

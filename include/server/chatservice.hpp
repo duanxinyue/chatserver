@@ -31,6 +31,13 @@ public:
     static ChatService* instance();
     
     /**
+     * @brief 初始化Redis连接
+     * @param host Redis主机地址
+     * @param port Redis端口
+     */
+    void initRedis(const std::string& host, int port);
+    
+    /**
      * @brief 处理用户登录
      * @param conn_id 连接ID
      * @param msg Protobuf消息对象

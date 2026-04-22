@@ -50,6 +50,10 @@ ChatService::ChatService() {
     _msgHandlerMap.insert(std::make_pair(HEARTBEAT_MSG, std::bind(&ChatService::handleHeartbeat, this, std::placeholders::_1, std::placeholders::_2)));
 }
 
+void ChatService::initRedis(const std::string& host, int port) {
+    _redis.connect(host, port);
+}
+
 /**
  * @brief 消息分发处理
  * 
