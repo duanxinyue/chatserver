@@ -2,8 +2,6 @@
 
 基于C++17和muduo网络库实现的IM聊天服务器练手项目。
 
-**项目地址**：[https://github.com/duanxinyue/chatserver](https://github.com/duanxinyue/chatserver)
-
 ## 项目简介
 
 本项目是一个用于学习C++网络编程的练手项目，实现了用户管理、单聊消息、好友管理等核心功能。代码结构清晰，采用现代C++特性和工程化实践，适合作为学习C++网络编程和后端开发的入门参考。
