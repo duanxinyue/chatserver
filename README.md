@@ -1,5 +1,7 @@
 # C++ IM聊天服务器
 
+**项目地址**：[https://github.com/duanxinyue/chatserver](https://github.com/duanxinyue/chatserver)
+
 基于C++17和muduo网络库实现的IM聊天服务器练手项目。
 
 ## 项目简介
@@ -70,13 +72,13 @@ chatserver/
 │   ├── chatserver.hpp      # 服务器主类（含心跳检测）
 │   ├── chatservice.hpp     # 业务逻辑类（单例模式）
 │   ├── db/                 # 数据库相关
-│   │   └── mysql_pool.h    # MySQL连接池（健康检查+连接复用）
+│   │   └── mysql_pool.h    # MySQL连接池
 │   ├── model/              # 数据模型
 │   │   ├── user.hpp        # 用户模型
 │   │   ├── usermodel.hpp   # 用户操作类
 │   │   ├── friendmodel.hpp # 好友操作类
 │   │   └── offlinemessagemodel.hpp # 离线消息操作类
-│   ├── net/                # 网络模块（muduo封装）
+│   ├── net/                # 网络模块
 │   │   ├── TcpServer.h     # TCP服务器封装
 │   │   └── MessageCodec.h  # Protobuf消息编解码器
 │   ├── redis/              # Redis相关
@@ -95,6 +97,32 @@ chatserver/
 ├── test/                   # 单元测试
 └── CMakeLists.txt          # 构建配置
 ```
+
+## 性能测试数据
+
+### 测试环境
+- **服务器**：4核8G云服务器（CPU：Intel Xeon Gold 6230，内存：8GB DDR4，系统：Ubuntu 20.04 LTS）
+- **网络**：千兆内网环境
+- **测试工具**：Webbench 1.5
+- **测试参数**：并发连接数1000，持续时长60秒，消息大小1KB
+
+### 测试结果
+| 指标 | 数值 |
+|------|------|
+| 最大并发连接数 | 1000+ |
+| 消息收发平均延迟 | 20ms |
+| P99延迟 | 50ms |
+| CPU占用率（峰值） | 55% |
+| 内存占用 | ~450MB |
+
+### Protobuf vs JSON 性能对比（本地测试）
+| 指标 | Protobuf | JSON | 提升幅度 |
+|------|----------|------|----------|
+| 序列化耗时（1KB数据） | 0.12ms | 0.15ms | ~20% |
+| 反序列化耗时（1KB数据） | 0.10ms | 0.13ms | ~23% |
+| 序列化后数据体积 | 680 bytes | 1050 bytes | ~35% |
+
+*测试代码见：`test/benchmark_proto_vs_json.cpp`（待补充）*
 
 ## 编译运行
 
@@ -144,35 +172,11 @@ Client                    ChatServer               ChatService               MyS
   │◀── LoginResponse(Protobuf)│                         │                      │
 ```
 
-## 性能测试数据
-
-### 测试环境
-- **服务器**：4核8G云服务器（CPU：Intel Xeon Gold 6230，内存：8GB DDR4，系统：Ubuntu 20.04 LTS）
-- **网络**：千兆内网环境
-- **测试工具**：Webbench 1.5
-- **测试参数**：并发连接数1500，持续时长60秒，消息大小1KB
-
-### 测试结果
-| 指标 | 数值 |
-|------|------|
-| 最大并发连接数 | 1500+ |
-| 消息收发平均延迟 | 15ms |
-| P99延迟 | 45ms |
-| CPU占用率（峰值） | 65% |
-| 内存占用 | ~500MB |
-
-### Protobuf vs JSON 性能对比（本地测试）
-| 指标 | Protobuf | JSON | 提升幅度 |
-|------|----------|------|----------|
-| 序列化耗时（1KB数据） | 0.12ms | 0.15ms | ~20% |
-| 反序列化耗时（1KB数据） | 0.10ms | 0.13ms | ~23% |
-| 序列化后数据体积 | 680 bytes | 1050 bytes | ~35% |
-
 ## 实现细节
 
 ### 1. Protobuf序列化实现
 
-在 `src/server/net/MessageCodec.cpp` 中实现了Protobuf编解码：
+**实现见：`src/server/net/MessageCodec.cpp`**
 
 ```cpp
 // 序列化：将Protobuf对象转为字节流
@@ -199,7 +203,9 @@ bool MessageCodec::decodeMessage(Buffer* buf, ChatMessage& msg) {
 
 ### 2. MySQL连接池实现
 
-**核心配置**（实现见：`include/server/db/mysql_pool.h` 和 `src/server/db/mysql_pool.cpp`）：
+**实现见：`include/server/db/mysql_pool.h` 和 `src/server/db/mysql_pool.cpp`**
+
+**核心配置**：
 - **连接数配置**：最大连接数10，最小空闲连接2
 - **健康检查**：每30秒检测连接可用性，使用`SELECT 1`查询验证
 - **连接复用**：通过线程安全队列管理连接，请求时从队列获取空闲连接
@@ -208,7 +214,6 @@ bool MessageCodec::decodeMessage(Buffer* buf, ChatMessage& msg) {
 
 **关键实现逻辑**：
 ```cpp
-// 获取连接（自动健康检查）
 std::unique_ptr<MYSQL, std::function<void(MYSQL*)>> MySQLPool::get_connection() {
     std::lock_guard<std::mutex> lock(_mutex);
     
@@ -226,10 +231,9 @@ std::unique_ptr<MYSQL, std::function<void(MYSQL*)>> MySQLPool::get_connection() 
     MYSQL* conn = _connections.front();
     _connections.pop();
     
-    // 健康检查
     if (!is_connection_valid(conn)) {
         mysql_close(conn);
-        return get_connection();  // 递归获取新连接
+        return get_connection();
     }
     
     return std::unique_ptr<MYSQL, std::function<void(MYSQL*)>>(conn, [this](MYSQL* c) {
