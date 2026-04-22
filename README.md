@@ -1,7 +1,5 @@
 # C++ IM聊天服务器
 
-**项目地址**：[https://github.com/duanxinyue/chatserver](https://github.com/duanxinyue/chatserver)
-
 基于C++17和muduo网络库实现的IM聊天服务器练手项目。
 
 ## 项目简介
@@ -320,5 +318,3 @@ Redis集成计划：
 ## 总结
 
 本项目是一个学习性质的IM聊天服务器练手项目，重点实现了网络通信、数据库操作和安全防护等核心功能。通过实践学习，可以掌握C++后端开发的基础技能和工程化实践方法。
-
-项目代码已开源至GitHub，包含完整的CMake构建脚本和Docker部署配置。
