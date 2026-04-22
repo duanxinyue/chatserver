@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  chatserver:
+    build: .
+    ports:
+      - "6000:6000"
+    depends_on:
+      - mysql
+      - redis
+    environment:
+      - ENV=production
+      - MYSQL_HOST=mysql
+      - MYSQL_PORT=3306
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    networks:
+      - chat-network
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: chat
+      MYSQL_USER: chatuser
+      MYSQL_PASSWORD: chatpass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - chat-network
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - chat-network
+
+volumes:
+  mysql-data:
+  redis-data:
+
+networks:
+  chat-network:
+    driver: bridge

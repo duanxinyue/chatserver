@@ -1,0 +1,480 @@
+syntax = "proto3";
+
+package chat;
+
+option cc_generic_services = true;
+
+// 消息类型枚举
+enum MsgType {
+    MSG_TYPE_UNKNOWN = 0;        // 未知消息
+    LOGIN_MSG = 1;              // 登录消息
+    LOGIN_MSG_ACK = 2;          // 登录响应消息
+    LOGINOUT_MSG = 3;           // 注销消息
+    LOGINOUT_MSG_ACK = 4;       // 注销响应消息
+    REG_MSG = 5;                // 注册消息
+    REG_MSG_ACK = 6;            // 注册响应消息
+    ONE_CHAT_MSG = 7;           // 单聊消息
+    ONE_CHAT_MSG_ACK = 8;       // 单聊响应消息
+    ADD_FRIEND_MSG = 9;         // 添加好友消息
+    ADD_FRIEND_MSG_ACK = 10;    // 添加好友响应消息
+    CREATE_GROUP_MSG = 11;      // 创建群组
+    CREATE_GROUP_MSG_ACK = 12;  // 创建群组响应消息
+    ADD_GROUP_MSG = 13;         // 加入群组
+    ADD_GROUP_MSG_ACK = 14;     // 加入群组响应消息
+    GROUP_CHAT_MSG = 15;        // 群聊天
+    GROUP_CHAT_MSG_ACK = 16;    // 群聊天响应消息
+    HEARTBEAT_MSG = 17;         // 心跳消息
+    HEARTBEAT_MSG_ACK = 18;     // 心跳响应
+    MSG_ACK = 19;               // 消息确认
+    GET_FRIEND_LIST_MSG = 20;   // 获取好友列表
+    GET_FRIEND_LIST_MSG_ACK = 21;// 获取好友列表响应
+    GET_GROUP_LIST_MSG = 22;    // 获取群组列表
+    GET_GROUP_LIST_MSG_ACK = 23;// 获取群组列表响应
+    GET_GROUP_MEMBERS_MSG = 24; // 获取群组成员
+    GET_GROUP_MEMBERS_MSG_ACK = 25;// 获取群组成员响应
+    DELETE_FRIEND_MSG = 26;     // 删除好友
+    DELETE_FRIEND_MSG_ACK = 27; // 删除好友响应
+    EXIT_GROUP_MSG = 28;        // 退出群组
+    EXIT_GROUP_MSG_ACK = 29;    // 退出群组响应
+}
+
+// 用户状态枚举
+enum UserState {
+    USER_STATE_OFFLINE = 0;     // 离线
+    USER_STATE_ONLINE = 1;      // 在线
+    USER_STATE_BUSY = 2;        // 忙碌
+    USER_STATE_AWAY = 3;        // 离开
+}
+
+// 错误码枚举
+enum ErrorCode {
+    ERROR_OK = 0;                        // 成功
+    ERROR_UNKNOWN = 1;                   // 未知错误
+    ERROR_INVALID_PARAM = 2;             // 参数无效
+    ERROR_USER_NOT_EXIST = 3;            // 用户不存在
+    ERROR_USER_EXIST = 4;                // 用户已存在
+    ERROR_PASSWORD_ERROR = 5;            // 密码错误
+    ERROR_FRIEND_EXIST = 6;              // 好友已存在
+    ERROR_FRIEND_NOT_EXIST = 7;          // 好友不存在
+    ERROR_GROUP_EXIST = 8;               // 群组已存在
+    ERROR_GROUP_NOT_EXIST = 9;           // 群组不存在
+    ERROR_NOT_IN_GROUP = 10;             // 不在群组中
+    ERROR_NO_PERMISSION = 11;            // 无权限
+    ERROR_SERVER_ERROR = 12;             // 服务器错误
+    ERROR_SERVICE_UNAVAILABLE = 13;      // 服务不可用
+    ERROR_TIMEOUT = 14;                  // 超时
+}
+
+// 用户信息
+message User {
+    int32 id = 1;                        // 用户ID
+    string name = 2;                     // 用户名
+    string password = 3;                 // 密码（仅用于注册）
+    UserState state = 4;                 // 用户状态
+    string avatar_url = 5;               // 头像URL
+    int64 create_time = 6;               // 创建时间戳
+}
+
+// 群组成员
+message GroupUser {
+    int32 id = 1;                        // 用户ID
+    string name = 2;                     // 用户名
+    UserState state = 3;                 // 用户状态
+    string role = 4;                     // 角色：owner/admin/member
+    int64 join_time = 5;                 // 加入时间
+}
+
+// 群组信息
+message Group {
+    int32 id = 1;                        // 群组ID
+    string group_name = 2;               // 群组名称
+    string group_desc = 3;               // 群组描述
+    repeated GroupUser users = 4;        // 群组成员列表
+    int64 create_time = 5;               // 创建时间
+}
+
+// 离线消息
+message OfflineMessage {
+    int32 from_id = 1;                   // 发送者ID
+    string content = 2;                  // 消息内容
+    string time = 3;                     // 发送时间
+    MsgType msg_type = 4;                // 消息类型
+    int32 group_id = 5;                  // 群组ID（群消息时有效）
+}
+
+// 基础请求消息
+message BaseRequest {
+    uint32 version = 1;                  // 协议版本号
+    MsgType msg_type = 2;                // 消息类型
+    uint32 seq = 3;                      // 消息序列号
+    int32 user_id = 4;                   // 用户ID
+}
+
+// 基础响应消息
+message BaseResponse {
+    uint32 version = 1;                  // 协议版本号
+    MsgType msg_type = 2;                // 消息类型
+    uint32 seq = 3;                      // 消息序列号
+    ErrorCode error_code = 4;            // 错误码
+    string error_msg = 5;                // 错误信息
+}
+
+// 登录请求
+message LoginRequest {
+    uint32 version = 1;                  // 协议版本号
+    MsgType msg_type = 2;                // 消息类型
+    uint32 seq = 3;                      // 消息序列号
+    int32 user_id = 4;                   // 用户ID
+    string password = 5;                 // 密码
+}
+
+// 登录响应
+message LoginResponse {
+    uint32 version = 1;                  // 协议版本号
+    MsgType msg_type = 2;                // 消息类型
+    uint32 seq = 3;                      // 消息序列号
+    ErrorCode error_code = 4;            // 错误码
+    string error_msg = 5;                // 错误信息
+    int32 user_id = 6;                   // 用户ID
+    string user_name = 7;                // 用户名
+    repeated OfflineMessage offline_messages = 8; // 离线消息列表
+    repeated User friends = 9;           // 好友列表
+    repeated Group groups = 10;          // 群组列表
+}
+
+// 注册请求
+message RegisterRequest {
+    uint32 version = 1;                  // 协议版本号
+    MsgType msg_type = 2;                // 消息类型
+    uint32 seq = 3;                      // 消息序列号
+    string name = 4;                     // 用户名
+    string password = 5;                 // 密码
+}
+
+// 注册响应
+message RegisterResponse {
+    uint32 version = 1;                  // 协议版本号
+    MsgType msg_type = 2;                // 消息类型
+    uint32 seq = 3;                      // 消息序列号
+    ErrorCode error_code = 4;            // 错误码
+    string error_msg = 5;                // 错误信息
+    int32 user_id = 6;                   // 分配的用户ID
+}
+
+// 注销请求
+message LogoutRequest {
+    uint32 version = 1;                  // 协议版本号
+    MsgType msg_type = 2;                // 消息类型
+    uint32 seq = 3;                      // 消息序列号
+    int32 user_id = 4;                   // 用户ID
+}
+
+// 注销响应
+message LogoutResponse {
+    uint32 version = 1;                  // 协议版本号
+    MsgType msg_type = 2;                // 消息类型
+    uint32 seq = 3;                      // 消息序列号
+    ErrorCode error_code = 4;            // 错误码
+    string error_msg = 5;                // 错误信息
+}
+
+// 单聊请求
+message OneChatRequest {
+    uint32 version = 1;                  // 协议版本号
+    MsgType msg_type = 2;                // 消息类型
+    uint32 seq = 3;                      // 消息序列号
+    int32 from_id = 4;                   // 发送者ID
+    int32 to_id = 5;                     // 接收者ID
+    string content = 6;                  // 消息内容
+    string time = 7;                     // 发送时间
+}
+
+// 单聊响应
+message OneChatResponse {
+    uint32 version = 1;                  // 协议版本号
+    MsgType msg_type = 2;                // 消息类型
+    uint32 seq = 3;                      // 消息序列号
+    ErrorCode error_code = 4;            // 错误码
+    string error_msg = 5;                // 错误信息
+}
+
+// 添加好友请求
+message AddFriendRequest {
+    uint32 version = 1;                  // 协议版本号
+    MsgType msg_type = 2;                // 消息类型
+    uint32 seq = 3;                      // 消息序列号
+    int32 user_id = 4;                   // 用户ID
+    int32 friend_id = 5;                 // 好友ID
+}
+
+// 添加好友响应
+message AddFriendResponse {
+    uint32 version = 1;                  // 协议版本号
+    MsgType msg_type = 2;                // 消息类型
+    uint32 seq = 3;                      // 消息序列号
+    ErrorCode error_code = 4;            // 错误码
+    string error_msg = 5;                // 错误信息
+    User friend_info = 6;                // 好友信息
+}
+
+// 删除好友请求
+message DeleteFriendRequest {
+    uint32 version = 1;                  // 协议版本号
+    MsgType msg_type = 2;                // 消息类型
+    uint32 seq = 3;                      // 消息序列号
+    int32 user_id = 4;                   // 用户ID
+    int32 friend_id = 5;                 // 好友ID
+}
+
+// 删除好友响应
+message DeleteFriendResponse {
+    uint32 version = 1;                  // 协议版本号
+    MsgType msg_type = 2;                // 消息类型
+    uint32 seq = 3;                      // 消息序列号
+    ErrorCode error_code = 4;            // 错误码
+    string error_msg = 5;                // 错误信息
+}
+
+// 创建群组请求
+message CreateGroupRequest {
+    uint32 version = 1;                  // 协议版本号
+    MsgType msg_type = 2;                // 消息类型
+    uint32 seq = 3;                      // 消息序列号
+    int32 user_id = 4;                   // 创建者ID
+    string group_name = 5;               // 群组名称
+    string group_desc = 6;               // 群组描述
+    repeated int32 member_ids = 7;       // 初始成员ID列表
+}
+
+// 创建群组响应
+message CreateGroupResponse {
+    uint32 version = 1;                  // 协议版本号
+    MsgType msg_type = 2;                // 消息类型
+    uint32 seq = 3;                      // 消息序列号
+    ErrorCode error_code = 4;            // 错误码
+    string error_msg = 5;                // 错误信息
+    Group group_info = 6;                // 群组信息
+}
+
+// 加入群组请求
+message AddGroupRequest {
+    uint32 version = 1;                  // 协议版本号
+    MsgType msg_type = 2;                // 消息类型
+    uint32 seq = 3;                      // 消息序列号
+    int32 user_id = 4;                   // 用户ID
+    int32 group_id = 5;                  // 群组ID
+}
+
+// 加入群组响应
+message AddGroupResponse {
+    uint32 version = 1;                  // 协议版本号
+    MsgType msg_type = 2;                // 消息类型
+    uint32 seq = 3;                      // 消息序列号
+    ErrorCode error_code = 4;            // 错误码
+    string error_msg = 5;                // 错误信息
+    Group group_info = 6;                // 群组信息
+}
+
+// 退出群组请求
+message ExitGroupRequest {
+    uint32 version = 1;                  // 协议版本号
+    MsgType msg_type = 2;                // 消息类型
+    uint32 seq = 3;                      // 消息序列号
+    int32 user_id = 4;                   // 用户ID
+    int32 group_id = 5;                  // 群组ID
+}
+
+// 退出群组响应
+message ExitGroupResponse {
+    uint32 version = 1;                  // 协议版本号
+    MsgType msg_type = 2;                // 消息类型
+    uint32 seq = 3;                      // 消息序列号
+    ErrorCode error_code = 4;            // 错误码
+    string error_msg = 5;                // 错误信息
+}
+
+// 群聊请求
+message GroupChatRequest {
+    uint32 version = 1;                  // 协议版本号
+    MsgType msg_type = 2;                // 消息类型
+    uint32 seq = 3;                      // 消息序列号
+    int32 user_id = 4;                   // 发送者ID
+    int32 group_id = 5;                  // 群组ID
+    string content = 6;                  // 消息内容
+    string time = 7;                     // 发送时间
+}
+
+// 群聊响应
+message GroupChatResponse {
+    uint32 version = 1;                  // 协议版本号
+    MsgType msg_type = 2;                // 消息类型
+    uint32 seq = 3;                      // 消息序列号
+    ErrorCode error_code = 4;            // 错误码
+    string error_msg = 5;                // 错误信息
+}
+
+// 心跳请求
+message HeartbeatRequest {
+    uint32 version = 1;                  // 协议版本号
+    MsgType msg_type = 2;                // 消息类型
+    uint32 seq = 3;                      // 消息序列号
+    int32 user_id = 4;                   // 用户ID
+    UserState state = 5;                 // 用户状态
+}
+
+// 心跳响应
+message HeartbeatResponse {
+    uint32 version = 1;                  // 协议版本号
+    MsgType msg_type = 2;                // 消息类型
+    uint32 seq = 3;                      // 消息序列号
+    ErrorCode error_code = 4;            // 错误码
+    string error_msg = 5;                // 错误信息
+}
+
+// 获取好友列表请求
+message GetFriendListRequest {
+    uint32 version = 1;                  // 协议版本号
+    MsgType msg_type = 2;                // 消息类型
+    uint32 seq = 3;                      // 消息序列号
+    int32 user_id = 4;                   // 用户ID
+}
+
+// 获取好友列表响应
+message GetFriendListResponse {
+    uint32 version = 1;                  // 协议版本号
+    MsgType msg_type = 2;                // 消息类型
+    uint32 seq = 3;                      // 消息序列号
+    ErrorCode error_code = 4;            // 错误码
+    string error_msg = 5;                // 错误信息
+    repeated User friends = 6;           // 好友列表
+}
+
+// 获取群组列表请求
+message GetGroupListRequest {
+    uint32 version = 1;                  // 协议版本号
+    MsgType msg_type = 2;                // 消息类型
+    uint32 seq = 3;                      // 消息序列号
+    int32 user_id = 4;                   // 用户ID
+}
+
+// 获取群组列表响应
+message GetGroupListResponse {
+    uint32 version = 1;                  // 协议版本号
+    MsgType msg_type = 2;                // 消息类型
+    uint32 seq = 3;                      // 消息序列号
+    ErrorCode error_code = 4;            // 错误码
+    string error_msg = 5;                // 错误信息
+    repeated Group groups = 6;           // 群组列表
+}
+
+// 获取群组成员请求
+message GetGroupMembersRequest {
+    uint32 version = 1;                  // 协议版本号
+    MsgType msg_type = 2;                // 消息类型
+    uint32 seq = 3;                      // 消息序列号
+    int32 user_id = 4;                   // 用户ID
+    int32 group_id = 5;                  // 群组ID
+}
+
+// 获取群组成员响应
+message GetGroupMembersResponse {
+    uint32 version = 1;                  // 协议版本号
+    MsgType msg_type = 2;                // 消息类型
+    uint32 seq = 3;                      // 消息序列号
+    ErrorCode error_code = 4;            // 错误码
+    string error_msg = 5;                // 错误信息
+    repeated GroupUser members = 6;      // 群组成员列表
+}
+
+// 消息确认
+message MsgAck {
+    uint32 version = 1;                  // 协议版本号
+    MsgType msg_type = 2;                // 消息类型
+    uint32 seq = 3;                      // 消息序列号
+    int32 user_id = 4;                   // 用户ID
+    uint32 ack_seq = 5;                  // 确认的消息序列号
+}
+
+// 通用包装消息
+message ChatMessage {
+    uint32 version = 1;                  // 协议版本号
+    MsgType msg_type = 2;                // 消息类型
+    uint32 seq = 3;                      // 消息序列号
+    
+    oneof message_body {
+        LoginRequest login_request = 4;
+        LoginResponse login_response = 5;
+        RegisterRequest register_request = 6;
+        RegisterResponse register_response = 7;
+        LogoutRequest logout_request = 8;
+        LogoutResponse logout_response = 9;
+        OneChatRequest one_chat_request = 10;
+        OneChatResponse one_chat_response = 11;
+        AddFriendRequest add_friend_request = 12;
+        AddFriendResponse add_friend_response = 13;
+        DeleteFriendRequest delete_friend_request = 14;
+        DeleteFriendResponse delete_friend_response = 15;
+        CreateGroupRequest create_group_request = 16;
+        CreateGroupResponse create_group_response = 17;
+        AddGroupRequest add_group_request = 18;
+        AddGroupResponse add_group_response = 19;
+        ExitGroupRequest exit_group_request = 20;
+        ExitGroupResponse exit_group_response = 21;
+        GroupChatRequest group_chat_request = 22;
+        GroupChatResponse group_chat_response = 23;
+        HeartbeatRequest heartbeat_request = 24;
+        HeartbeatResponse heartbeat_response = 25;
+        MsgAck msg_ack = 26;
+        GetFriendListRequest get_friend_list_request = 27;
+        GetFriendListResponse get_friend_list_response = 28;
+        GetGroupListRequest get_group_list_request = 29;
+        GetGroupListResponse get_group_list_response = 30;
+        GetGroupMembersRequest get_group_members_request = 31;
+        GetGroupMembersResponse get_group_members_response = 32;
+    }
+}
+
+// IM服务定义
+service ChatService {
+    // 用户登录
+    rpc Login(LoginRequest) returns (LoginResponse);
+    
+    // 用户注册
+    rpc Register(RegisterRequest) returns (RegisterResponse);
+    
+    // 用户注销
+    rpc Logout(LogoutRequest) returns (LogoutResponse);
+    
+    // 单聊消息
+    rpc OneChat(OneChatRequest) returns (OneChatResponse);
+    
+    // 添加好友
+    rpc AddFriend(AddFriendRequest) returns (AddFriendResponse);
+    
+    // 删除好友
+    rpc DeleteFriend(DeleteFriendRequest) returns (DeleteFriendResponse);
+    
+    // 创建群组
+    rpc CreateGroup(CreateGroupRequest) returns (CreateGroupResponse);
+    
+    // 加入群组
+    rpc AddGroup(AddGroupRequest) returns (AddGroupResponse);
+    
+    // 退出群组
+    rpc ExitGroup(ExitGroupRequest) returns (ExitGroupResponse);
+    
+    // 群聊消息
+    rpc GroupChat(GroupChatRequest) returns (GroupChatResponse);
+    
+    // 心跳
+    rpc Heartbeat(HeartbeatRequest) returns (HeartbeatResponse);
+    
+    // 获取好友列表
+    rpc GetFriendList(GetFriendListRequest) returns (GetFriendListResponse);
+    
+    // 获取群组列表
+    rpc GetGroupList(GetGroupListRequest) returns (GetGroupListResponse);
+    
+    // 获取群组成员
+    rpc GetGroupMembers(GetGroupMembersRequest) returns (GetGroupMembersResponse);
+}
