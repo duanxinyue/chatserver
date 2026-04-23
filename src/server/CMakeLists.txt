@@ -11,6 +11,8 @@ include_directories(${PROTOBUF_INCLUDE_DIRS})
 
 protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS ${PROJECT_SOURCE_DIR}/proto/chat.proto)
 
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+
 add_executable(ChatServer ${SRC_LIST} ${DB_LIST} ${MODEL_LIST} ${REDIS_LIST} 
                ${MESSAGE_LIST} ${UTIL_LIST} ${NET_LIST} ${PROTO_SRCS} ${PROTO_HDRS})
 
