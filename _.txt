@@ -18,9 +18,9 @@ Step 6/10 : WORKDIR /app
  ---> Using cache
  ---> f95e7f506738
 Step 7/10 : COPY . .
- ---> 80873cdf7668
+ ---> 7790cc3c8c89
 Step 8/10 : RUN mkdir -p build && cd build     && cmake -DCMAKE_BUILD_TYPE=Release ..     && make -j$(nproc)
- ---> Running in e2afe2503b6a
+ ---> Running in 8773e2e454ca
 -- The C compiler identification is GNU 11.4.0
 -- The CXX compiler identification is GNU 11.4.0
 -- Detecting C compiler ABI info
@@ -38,25 +38,67 @@ Step 8/10 : RUN mkdir -p build && cd build     && cmake -DCMAKE_BUILD_TYPE=Relea
 -- Generating done
 -- Build files have been written to: /app/build
 [  5%] Running cpp protocol buffer compiler on /app/proto/chat.proto
-[ 10%] Building CXX object src/server/CMakeFiles/ChatServer.dir/main.cpp.o
+[ 10%] Building CXX object src/server/CMakeFiles/ChatServer.dir/chatserver.cpp.o
 [ 15%] Building CXX object src/server/CMakeFiles/ChatServer.dir/chatservice.cpp.o
-[ 25%] Building CXX object src/server/CMakeFiles/ChatServer.dir/model/friendmodel.cpp.o
+[ 20%] Building CXX object src/server/CMakeFiles/ChatServer.dir/main.cpp.o
 [ 25%] Building CXX object src/server/CMakeFiles/ChatServer.dir/db/mysql_pool.cpp.o
-[ 35%] Building CXX object src/server/CMakeFiles/ChatServer.dir/chatserver.cpp.o
+[ 30%] Building CXX object src/server/CMakeFiles/ChatServer.dir/model/friendmodel.cpp.o
 [ 35%] Building CXX object src/server/CMakeFiles/ChatServer.dir/model/offlinemessagemodel.cpp.o
 [ 40%] Building CXX object src/server/CMakeFiles/ChatServer.dir/model/usermodel.cpp.o
-[ 45%] Building CXX object src/server/CMakeFiles/ChatServer.dir/message/offline_message_manager.cpp.o
-[ 50%] Building CXX object src/server/CMakeFiles/ChatServer.dir/redis/redis.cpp.o
+[ 45%] Building CXX object src/server/CMakeFiles/ChatServer.dir/redis/redis.cpp.o
+[ 50%] Building CXX object src/server/CMakeFiles/ChatServer.dir/message/offline_message_manager.cpp.o
 [ 55%] Building CXX object src/server/CMakeFiles/ChatServer.dir/util/bcrypt.cpp.o
-[ 60%] Building CXX object src/server/CMakeFiles/ChatServer.dir/util/crypto.cpp.o
-[ 65%] Building CXX object src/server/CMakeFiles/ChatServer.dir/util/config.cpp.o
+[ 60%] Building CXX object src/server/CMakeFiles/ChatServer.dir/util/config.cpp.o
+[ 65%] Building CXX object src/server/CMakeFiles/ChatServer.dir/util/crypto.cpp.o
 [ 70%] Building CXX object src/server/CMakeFiles/ChatServer.dir/util/error_code.cpp.o
-/app/src/server/util/error_code.cpp:2:10: fatal error: json.hpp: No such file or directory
-    2 | #include "json.hpp"
-      |          ^~~~~~~~~~
-compilation terminated.
-make[2]: *** [src/server/CMakeFiles/ChatServer.dir/build.make:252: src/server/CMakeFiles/ChatServer.dir/util/error_code.cpp.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
+/app/src/server/model/offlinemessagemodel.cpp: In member function 'void OfflineMsgModel::insert(int, std::string)':
+/app/src/server/model/offlinemessagemodel.cpp:17:17: warning: unused variable 'sql' [-Wunused-variable]
+   17 |     const char* sql = "INSERT INTO offlinemessage(userid, message, is_read) VALUES(?, ?, 0)";
+      |                 ^~~
+/app/src/server/model/offlinemessagemodel.cpp: In member function 'void OfflineMsgModel::remove(int)':
+/app/src/server/model/offlinemessagemodel.cpp:58:17: warning: unused variable 'sql' [-Wunused-variable]
+   58 |     const char* sql = "DELETE FROM offlinemessage WHERE userid = ?";
+      |                 ^~~
+/app/src/server/model/offlinemessagemodel.cpp: In member function 'std::vector<std::__cxx11::basic_string<char> > OfflineMsgModel::query(int)':
+/app/src/server/model/offlinemessagemodel.cpp:95:17: warning: unused variable 'sql' [-Wunused-variable]
+   95 |     const char* sql = "SELECT message FROM offlinemessage WHERE userid = ?";
+      |                 ^~~
+/app/src/server/model/offlinemessagemodel.cpp: In member function 'std::vector<OfflineMsg> OfflineMsgModel::queryBatch(int, int, int)':
+/app/src/server/model/offlinemessagemodel.cpp:155:17: warning: unused variable 'sql' [-Wunused-variable]
+  155 |     const char* sql = "SELECT id, userid, message, create_time, is_read FROM offlinemessage WHERE userid = ? ORDER BY create_time DESC LIMIT ?, ?";
+      |                 ^~~
+/app/src/server/model/offlinemessagemodel.cpp: In member function 'int OfflineMsgModel::getCount(int)':
+/app/src/server/model/offlinemessagemodel.cpp:244:17: warning: unused variable 'sql' [-Wunused-variable]
+  244 |     const char* sql = "SELECT COUNT(*) FROM offlinemessage WHERE userid = ?";
+      |                 ^~~
+/app/src/server/model/offlinemessagemodel.cpp: In member function 'void OfflineMsgModel::markAsRead(int)':
+/app/src/server/model/offlinemessagemodel.cpp:299:17: warning: unused variable 'sql' [-Wunused-variable]
+  299 |     const char* sql = "UPDATE offlinemessage SET is_read = 1 WHERE id = ?";
+      |                 ^~~
+/app/src/server/model/offlinemessagemodel.cpp: In member function 'void OfflineMsgModel::cleanExpired(int)':
+/app/src/server/model/offlinemessagemodel.cpp:396:17: warning: unused variable 'sql' [-Wunused-variable]
+  396 |     const char* sql = "DELETE FROM offlinemessage WHERE create_time < DATE_SUB(NOW(), INTERVAL ? DAY)";
+      |                 ^~~
+/app/src/server/model/offlinemessagemodel.cpp: In member function 'int OfflineMsgModel::getUnreadCount(int)':
+/app/src/server/model/offlinemessagemodel.cpp:434:17: warning: unused variable 'sql' [-Wunused-variable]
+  434 |     const char* sql = "SELECT COUNT(*) FROM offlinemessage WHERE userid = ? AND is_read = 0";
+      |                 ^~~
+/app/src/server/model/usermodel.cpp: In member function 'bool UserModel::insert(chatserver::User&)':
+/app/src/server/model/usermodel.cpp:22:17: warning: unused variable 'sql' [-Wunused-variable]
+   22 |     const char* sql = "INSERT INTO user(name, password, state) VALUES(?, ?, ?)";
+      |                 ^~~
+/app/src/server/model/usermodel.cpp: In member function 'chatserver::User UserModel::query(int)':
+/app/src/server/model/usermodel.cpp:79:17: warning: unused variable 'sql' [-Wunused-variable]
+   79 |     const char* sql = "SELECT id, name, password, state FROM user WHERE id = ?";
+      |                 ^~~
+/app/src/server/model/usermodel.cpp: In member function 'bool UserModel::updateState(chatserver::User)':
+/app/src/server/model/usermodel.cpp:157:17: warning: unused variable 'sql' [-Wunused-variable]
+  157 |     const char* sql = "UPDATE user SET state = ? WHERE id = ?";
+      |                 ^~~
+/app/src/server/model/usermodel.cpp: In member function 'std::string UserModel::getState(int)':
+/app/src/server/model/usermodel.cpp:243:17: warning: unused variable 'sql' [-Wunused-variable]
+  243 |     const char* sql = "SELECT state FROM user WHERE id = ?";
+      |                 ^~~
 /app/src/server/model/friendmodel.cpp: In member function 'bool FriendModel::insert(int, int)':
 /app/src/server/model/friendmodel.cpp:17:17: warning: unused variable 'sql' [-Wunused-variable]
    17 |     const char* sql = "INSERT INTO friend(userid, friendid) VALUES(?, ?)";
@@ -81,61 +123,88 @@ make[2]: *** Waiting for unfinished jobs....
 /app/src/server/model/friendmodel.cpp:315:21: warning: unused variable 'insert_sql' [-Wunused-variable]
   315 |         const char* insert_sql = "INSERT INTO friend(userid, friendid) VALUES(?, ?), (?, ?)";
       |                     ^~~~~~~~~~
-/app/src/server/model/offlinemessagemodel.cpp: In member function 'void OfflineMsgModel::insert(int, std::string)':
-/app/src/server/model/offlinemessagemodel.cpp:17:17: warning: unused variable 'sql' [-Wunused-variable]
-   17 |     const char* sql = "INSERT INTO offlinemessage(userid, message, is_read) VALUES(?, ?, 0)";
-      |                 ^~~
 /app/src/server/model/friendmodel.cpp:350:17: warning: unused variable 'update_sql' [-Wunused-variable]
   350 |     const char* update_sql = "UPDATE friend_request SET status = ? WHERE id = ?";
       |                 ^~~~~~~~~~
-/app/src/server/model/offlinemessagemodel.cpp: In member function 'void OfflineMsgModel::remove(int)':
-/app/src/server/model/offlinemessagemodel.cpp:58:17: warning: unused variable 'sql' [-Wunused-variable]
-   58 |     const char* sql = "DELETE FROM offlinemessage WHERE userid = ?";
-      |                 ^~~
 /app/src/server/model/friendmodel.cpp: In member function 'bool FriendModel::getFriendRequest(int, int&, int&, std::string&)':
 /app/src/server/model/friendmodel.cpp:403:17: warning: unused variable 'sql' [-Wunused-variable]
   403 |     const char* sql = "SELECT from_id, to_id, status FROM friend_request WHERE id = ?";
       |                 ^~~
-/app/src/server/model/usermodel.cpp: In member function 'bool UserModel::insert(chatserver::User&)':
-/app/src/server/model/usermodel.cpp:22:17: warning: unused variable 'sql' [-Wunused-variable]
-   22 |     const char* sql = "INSERT INTO user(name, password, state) VALUES(?, ?, ?)";
-      |                 ^~~
-/app/src/server/model/usermodel.cpp: In member function 'chatserver::User UserModel::query(int)':
-/app/src/server/model/usermodel.cpp:79:17: warning: unused variable 'sql' [-Wunused-variable]
-   79 |     const char* sql = "SELECT id, name, password, state FROM user WHERE id = ?";
-      |                 ^~~
-/app/src/server/model/offlinemessagemodel.cpp: In member function 'std::vector<std::__cxx11::basic_string<char> > OfflineMsgModel::query(int)':
-/app/src/server/model/offlinemessagemodel.cpp:95:17: warning: unused variable 'sql' [-Wunused-variable]
-   95 |     const char* sql = "SELECT message FROM offlinemessage WHERE userid = ?";
-      |                 ^~~
-/app/src/server/model/usermodel.cpp: In member function 'bool UserModel::updateState(chatserver::User)':
-/app/src/server/model/usermodel.cpp:157:17: warning: unused variable 'sql' [-Wunused-variable]
-  157 |     const char* sql = "UPDATE user SET state = ? WHERE id = ?";
-      |                 ^~~
-/app/src/server/model/usermodel.cpp: In member function 'std::string UserModel::getState(int)':
-/app/src/server/model/usermodel.cpp:243:17: warning: unused variable 'sql' [-Wunused-variable]
-  243 |     const char* sql = "SELECT state FROM user WHERE id = ?";
-      |                 ^~~
-/app/src/server/model/offlinemessagemodel.cpp: In member function 'std::vector<OfflineMsg> OfflineMsgModel::queryBatch(int, int, int)':
-/app/src/server/model/offlinemessagemodel.cpp:155:17: warning: unused variable 'sql' [-Wunused-variable]
-  155 |     const char* sql = "SELECT id, userid, message, create_time, is_read FROM offlinemessage WHERE userid = ? ORDER BY create_time DESC LIMIT ?, ?";
-      |                 ^~~
-/app/src/server/model/offlinemessagemodel.cpp: In member function 'int OfflineMsgModel::getCount(int)':
-/app/src/server/model/offlinemessagemodel.cpp:244:17: warning: unused variable 'sql' [-Wunused-variable]
-  244 |     const char* sql = "SELECT COUNT(*) FROM offlinemessage WHERE userid = ?";
-      |                 ^~~
-/app/src/server/model/offlinemessagemodel.cpp: In member function 'void OfflineMsgModel::markAsRead(int)':
-/app/src/server/model/offlinemessagemodel.cpp:299:17: warning: unused variable 'sql' [-Wunused-variable]
-  299 |     const char* sql = "UPDATE offlinemessage SET is_read = 1 WHERE id = ?";
-      |                 ^~~
-/app/src/server/model/offlinemessagemodel.cpp: In member function 'void OfflineMsgModel::cleanExpired(int)':
-/app/src/server/model/offlinemessagemodel.cpp:396:17: warning: unused variable 'sql' [-Wunused-variable]
-  396 |     const char* sql = "DELETE FROM offlinemessage WHERE create_time < DATE_SUB(NOW(), INTERVAL ? DAY)";
-      |                 ^~~
-/app/src/server/model/offlinemessagemodel.cpp: In member function 'int OfflineMsgModel::getUnreadCount(int)':
-/app/src/server/model/offlinemessagemodel.cpp:434:17: warning: unused variable 'sql' [-Wunused-variable]
-  434 |     const char* sql = "SELECT COUNT(*) FROM offlinemessage WHERE userid = ? AND is_read = 0";
-      |                 ^~~
+[ 75%] Building CXX object src/server/CMakeFiles/ChatServer.dir/util/logging.cpp.o
+[ 80%] Building CXX object src/server/CMakeFiles/ChatServer.dir/net/Controller.cpp.o
+[ 85%] Building CXX object src/server/CMakeFiles/ChatServer.dir/net/MessageCodec.cpp.o
+[ 90%] Building CXX object src/server/CMakeFiles/ChatServer.dir/net/TcpServer.cpp.o
+[ 95%] Building CXX object src/server/CMakeFiles/ChatServer.dir/chat.pb.cc.o
+[100%] Linking CXX executable ../../../bin/ChatServer
+/usr/bin/ld: CMakeFiles/ChatServer.dir/chatserver.cpp.o: in function `int fmt::v8::detail::get_dynamic_spec<fmt::v8::detail::width_checker, fmt::v8::basic_format_arg<fmt::v8::basic_format_context<fmt::v8::appender, char> >, fmt::v8::detail::error_handler>(fmt::v8::basic_format_arg<fmt::v8::basic_format_context<fmt::v8::appender, char> >, fmt::v8::detail::error_handler)':
+chatserver.cpp:(.text._ZN3fmt2v86detail16get_dynamic_specINS1_13width_checkerENS0_16basic_format_argINS0_20basic_format_contextINS0_8appenderEcEEEENS1_13error_handlerEEEiT0_T1_[_ZN3fmt2v86detail16get_dynamic_specINS1_13width_checkerENS0_16basic_format_argINS0_20basic_format_contextINS0_8appenderEcEEEENS1_13error_handlerEEEiT0_T1_]+0x57): undefined reference to `fmt::v8::detail::error_handler::on_error(char const*)'
+/usr/bin/ld: chatserver.cpp:(.text._ZN3fmt2v86detail16get_dynamic_specINS1_13width_checkerENS0_16basic_format_argINS0_20basic_format_contextINS0_8appenderEcEEEENS1_13error_handlerEEEiT0_T1_[_ZN3fmt2v86detail16get_dynamic_specINS1_13width_checkerENS0_16basic_format_argINS0_20basic_format_contextINS0_8appenderEcEEEENS1_13error_handlerEEEiT0_T1_]+0x93): undefined reference to `fmt::v8::detail::error_handler::on_error(char const*)'
+/usr/bin/ld: chatserver.cpp:(.text._ZN3fmt2v86detail16get_dynamic_specINS1_13width_checkerENS0_16basic_format_argINS0_20basic_format_contextINS0_8appenderEcEEEENS1_13error_handlerEEEiT0_T1_[_ZN3fmt2v86detail16get_dynamic_specINS1_13width_checkerENS0_16basic_format_argINS0_20basic_format_contextINS0_8appenderEcEEEENS1_13error_handlerEEEiT0_T1_]+0xa4): undefined reference to `fmt::v8::detail::error_handler::on_error(char const*)'
+/usr/bin/ld: CMakeFiles/ChatServer.dir/chatserver.cpp.o: in function `char const* fmt::v8::detail::do_parse_arg_id<char, fmt::v8::detail::parse_width<char, fmt::v8::detail::specs_checker<fmt::v8::detail::specs_handler<char> >&>(char const*, char const*, fmt::v8::detail::specs_checker<fmt::v8::detail::specs_handler<char> >&)::width_adapter&>(char const*, char const*, fmt::v8::detail::specs_checker<fmt::v8::detail::specs_handler<char> >&)':
+chatserver.cpp:(.text._ZN3fmt2v86detail15do_parse_arg_idIcRZNS1_11parse_widthIcRNS1_13specs_checkerINS1_13specs_handlerIcEEEEEEPKT_SB_SB_OT0_E13width_adapterEESB_SB_SB_SD_[_ZN3fmt2v86detail15do_parse_arg_idIcRZNS1_11parse_widthIcRNS1_13specs_checkerINS1_13specs_handlerIcEEEEEEPKT_SB_SB_OT0_E13width_adapterEESB_SB_SB_SD_]+0x20e): undefined reference to `fmt::v8::detail::error_handler::on_error(char const*)'
+/usr/bin/ld: chatserver.cpp:(.text._ZN3fmt2v86detail15do_parse_arg_idIcRZNS1_11parse_widthIcRNS1_13specs_checkerINS1_13specs_handlerIcEEEEEEPKT_SB_SB_OT0_E13width_adapterEESB_SB_SB_SD_[_ZN3fmt2v86detail15do_parse_arg_idIcRZNS1_11parse_widthIcRNS1_13specs_checkerINS1_13specs_handlerIcEEEEEEPKT_SB_SB_OT0_E13width_adapterEESB_SB_SB_SD_]+0x2a1): undefined reference to `fmt::v8::detail::error_handler::on_error(char const*)'
+/usr/bin/ld: CMakeFiles/ChatServer.dir/chatserver.cpp.o:chatserver.cpp:(.text._ZN3fmt2v86detail15do_parse_arg_idIcRZNS1_11parse_widthIcRNS1_13specs_checkerINS1_13specs_handlerIcEEEEEEPKT_SB_SB_OT0_E13width_adapterEESB_SB_SB_SD_[_ZN3fmt2v86detail15do_parse_arg_idIcRZNS1_11parse_widthIcRNS1_13specs_checkerINS1_13specs_handlerIcEEEEEEPKT_SB_SB_OT0_E13width_adapterEESB_SB_SB_SD_]+0x37d): more undefined references to `fmt::v8::detail::error_handler::on_error(char const*)' follow
+/usr/bin/ld: CMakeFiles/ChatServer.dir/chatserver.cpp.o: in function `fmt::v8::appender fmt::v8::detail::write<char, fmt::v8::appender>(fmt::v8::appender, char const*)':
+chatserver.cpp:(.text._ZN3fmt2v86detail5writeIcNS0_8appenderEEET0_S4_PKT_[_ZN3fmt2v86detail5writeIcNS0_8appenderEEET0_S4_PKT_]+0x3e): undefined reference to `fmt::v8::detail::throw_format_error(char const*)'
+/usr/bin/ld: CMakeFiles/ChatServer.dir/chatserver.cpp.o: in function `fmt::v8::detail::digit_grouping<char>::digit_grouping(fmt::v8::detail::locale_ref, bool)':
+chatserver.cpp:(.text._ZN3fmt2v86detail14digit_groupingIcEC2ENS1_10locale_refEb[_ZN3fmt2v86detail14digit_groupingIcEC5ENS1_10locale_refEb]+0x69): undefined reference to `fmt::v8::detail::thousands_sep_result<char> fmt::v8::detail::thousands_sep_impl<char>(fmt::v8::detail::locale_ref)'
+/usr/bin/ld: CMakeFiles/ChatServer.dir/chatserver.cpp.o: in function `bool fmt::v8::detail::write_int_localized<fmt::v8::appender, unsigned long, char>(fmt::v8::appender&, unsigned long, unsigned int, fmt::v8::basic_format_specs<char> const&, fmt::v8::detail::locale_ref)':
+chatserver.cpp:(.text._ZN3fmt2v86detail19write_int_localizedINS0_8appenderEmcEEbRT_T0_jRKNS0_18basic_format_specsIT1_EENS1_10locale_refE[_ZN3fmt2v86detail19write_int_localizedINS0_8appenderEmcEEbRT_T0_jRKNS0_18basic_format_specsIT1_EENS1_10locale_refE]+0x5a): undefined reference to `fmt::v8::detail::thousands_sep_result<char> fmt::v8::detail::thousands_sep_impl<char>(fmt::v8::detail::locale_ref)'
+/usr/bin/ld: CMakeFiles/ChatServer.dir/chatserver.cpp.o: in function `fmt::v8::appender fmt::v8::detail::write_int_noinline<char, fmt::v8::appender, unsigned int>(fmt::v8::appender, fmt::v8::detail::write_int_arg<unsigned int>, fmt::v8::basic_format_specs<char> const&, fmt::v8::detail::locale_ref)':
+chatserver.cpp:(.text._ZN3fmt2v86detail18write_int_noinlineIcNS0_8appenderEjEET0_S4_NS1_13write_int_argIT1_EERKNS0_18basic_format_specsIT_EENS1_10locale_refE[_ZN3fmt2v86detail18write_int_noinlineIcNS0_8appenderEjEET0_S4_NS1_13write_int_argIT1_EERKNS0_18basic_format_specsIT_EENS1_10locale_refE]+0x821): undefined reference to `fmt::v8::detail::throw_format_error(char const*)'
+/usr/bin/ld: CMakeFiles/ChatServer.dir/chatserver.cpp.o: in function `fmt::v8::appender fmt::v8::detail::write_int_noinline<char, fmt::v8::appender, unsigned long>(fmt::v8::appender, fmt::v8::detail::write_int_arg<unsigned long>, fmt::v8::basic_format_specs<char> const&, fmt::v8::detail::locale_ref) [clone .isra.0]':
+chatserver.cpp:(.text._ZN3fmt2v86detail18write_int_noinlineIcNS0_8appenderEmEET0_S4_NS1_13write_int_argIT1_EERKNS0_18basic_format_specsIT_EENS1_10locale_refE.isra.0[_ZZN3fmt2v86detail10vformat_toIcEEvRNS1_6bufferIT_EENS0_17basic_string_viewIS4_EENS0_17basic_format_argsINS0_20basic_format_contextINSt11conditionalIXsrSt7is_sameINS0_13type_identityIS4_E4typeEcE5valueENS0_8appenderESt20back_insert_iteratorINS3_ISF_EEEE4typeESF_EEEENS1_10locale_refEEN14format_handler15on_format_specsEiPKcSS_]+0x966): undefined reference to `fmt::v8::detail::throw_format_error(char const*)'
+/usr/bin/ld: CMakeFiles/ChatServer.dir/chatserver.cpp.o: in function `fmt::v8::appender fmt::v8::detail::do_write_float<fmt::v8::appender, fmt::v8::detail::dragonbox::decimal_fp<float>, char, fmt::v8::detail::digit_grouping<char> >(fmt::v8::appender, fmt::v8::detail::dragonbox::decimal_fp<float> const&, fmt::v8::basic_format_specs<char> const&, fmt::v8::detail::float_specs, fmt::v8::detail::locale_ref)':
+chatserver.cpp:(.text._ZN3fmt2v86detail14do_write_floatINS0_8appenderENS1_9dragonbox10decimal_fpIfEEcNS1_14digit_groupingIcEEEET_S9_RKT0_RKNS0_18basic_format_specsIT1_EENS1_11float_specsENS1_10locale_refE[_ZN3fmt2v86detail14do_write_floatINS0_8appenderENS1_9dragonbox10decimal_fpIfEEcNS1_14digit_groupingIcEEEET_S9_RKT0_RKNS0_18basic_format_specsIT1_EENS1_11float_specsENS1_10locale_refE]+0x4fc): undefined reference to `char fmt::v8::detail::decimal_point_impl<char>(fmt::v8::detail::locale_ref)'
+/usr/bin/ld: CMakeFiles/ChatServer.dir/chatserver.cpp.o: in function `fmt::v8::appender fmt::v8::detail::write<char, fmt::v8::appender, float, 0>(fmt::v8::appender, float)':
+chatserver.cpp:(.text._ZN3fmt2v86detail5writeIcNS0_8appenderEfLi0EEET0_S4_T1_[_ZN3fmt2v86detail5writeIcNS0_8appenderEfLi0EEET0_S4_T1_]+0x72): undefined reference to `fmt::v8::detail::dragonbox::decimal_fp<float> fmt::v8::detail::dragonbox::to_decimal<float>(float)'
+/usr/bin/ld: CMakeFiles/ChatServer.dir/chatserver.cpp.o: in function `fmt::v8::appender fmt::v8::detail::do_write_float<fmt::v8::appender, fmt::v8::detail::dragonbox::decimal_fp<double>, char, fmt::v8::detail::digit_grouping<char> >(fmt::v8::appender, fmt::v8::detail::dragonbox::decimal_fp<double> const&, fmt::v8::basic_format_specs<char> const&, fmt::v8::detail::float_specs, fmt::v8::detail::locale_ref)':
+chatserver.cpp:(.text._ZN3fmt2v86detail14do_write_floatINS0_8appenderENS1_9dragonbox10decimal_fpIdEEcNS1_14digit_groupingIcEEEET_S9_RKT0_RKNS0_18basic_format_specsIT1_EENS1_11float_specsENS1_10locale_refE[_ZN3fmt2v86detail14do_write_floatINS0_8appenderENS1_9dragonbox10decimal_fpIdEEcNS1_14digit_groupingIcEEEET_S9_RKT0_RKNS0_18basic_format_specsIT1_EENS1_11float_specsENS1_10locale_refE]+0x544): undefined reference to `char fmt::v8::detail::decimal_point_impl<char>(fmt::v8::detail::locale_ref)'
+/usr/bin/ld: CMakeFiles/ChatServer.dir/chatserver.cpp.o: in function `fmt::v8::appender fmt::v8::detail::write<char, fmt::v8::appender, double, 0>(fmt::v8::appender, double)':
+chatserver.cpp:(.text._ZN3fmt2v86detail5writeIcNS0_8appenderEdLi0EEET0_S4_T1_[_ZN3fmt2v86detail5writeIcNS0_8appenderEdLi0EEET0_S4_T1_]+0x80): undefined reference to `fmt::v8::detail::dragonbox::decimal_fp<double> fmt::v8::detail::dragonbox::to_decimal<double>(double)'
+/usr/bin/ld: CMakeFiles/ChatServer.dir/chatserver.cpp.o: in function `fmt::v8::appender fmt::v8::detail::do_write_float<fmt::v8::appender, fmt::v8::detail::big_decimal_fp, char, fmt::v8::detail::digit_grouping<char> >(fmt::v8::appender, fmt::v8::detail::big_decimal_fp const&, fmt::v8::basic_format_specs<char> const&, fmt::v8::detail::float_specs, fmt::v8::detail::locale_ref)':
+chatserver.cpp:(.text._ZN3fmt2v86detail14do_write_floatINS0_8appenderENS1_14big_decimal_fpEcNS1_14digit_groupingIcEEEET_S7_RKT0_RKNS0_18basic_format_specsIT1_EENS1_11float_specsENS1_10locale_refE[_ZN3fmt2v86detail14do_write_floatINS0_8appenderENS1_14big_decimal_fpEcNS1_14digit_groupingIcEEEET_S7_RKT0_RKNS0_18basic_format_specsIT1_EENS1_11float_specsENS1_10locale_refE]+0x5a5): undefined reference to `char fmt::v8::detail::decimal_point_impl<char>(fmt::v8::detail::locale_ref)'
+/usr/bin/ld: CMakeFiles/ChatServer.dir/chatserver.cpp.o: in function `fmt::v8::appender fmt::v8::detail::write<char, fmt::v8::appender, long double, 0>(fmt::v8::appender, long double, fmt::v8::basic_format_specs<char>, fmt::v8::detail::locale_ref)':
+chatserver.cpp:(.text._ZN3fmt2v86detail5writeIcNS0_8appenderEeLi0EEET0_S4_T1_NS0_18basic_format_specsIT_EENS1_10locale_refE[_ZN3fmt2v86detail5writeIcNS0_8appenderEeLi0EEET0_S4_T1_NS0_18basic_format_specsIT_EENS1_10locale_refE]+0x176): undefined reference to `int fmt::v8::detail::format_float<long double>(long double, int, fmt::v8::detail::float_specs, fmt::v8::detail::buffer<char>&)'
+/usr/bin/ld: chatserver.cpp:(.text._ZN3fmt2v86detail5writeIcNS0_8appenderEeLi0EEET0_S4_T1_NS0_18basic_format_specsIT_EENS1_10locale_refE[_ZN3fmt2v86detail5writeIcNS0_8appenderEeLi0EEET0_S4_T1_NS0_18basic_format_specsIT_EENS1_10locale_refE]+0x3a3): undefined reference to `int fmt::v8::detail::snprintf_float<long double>(long double, int, fmt::v8::detail::float_specs, fmt::v8::detail::buffer<char>&)'
+/usr/bin/ld: chatserver.cpp:(.text._ZN3fmt2v86detail5writeIcNS0_8appenderEeLi0EEET0_S4_T1_NS0_18basic_format_specsIT_EENS1_10locale_refE[_ZN3fmt2v86detail5writeIcNS0_8appenderEeLi0EEET0_S4_T1_NS0_18basic_format_specsIT_EENS1_10locale_refE]+0x4d9): undefined reference to `fmt::v8::detail::error_handler::on_error(char const*)'
+/usr/bin/ld: chatserver.cpp:(.text._ZN3fmt2v86detail5writeIcNS0_8appenderEeLi0EEET0_S4_T1_NS0_18basic_format_specsIT_EENS1_10locale_refE[_ZN3fmt2v86detail5writeIcNS0_8appenderEeLi0EEET0_S4_T1_NS0_18basic_format_specsIT_EENS1_10locale_refE]+0x4f3): undefined reference to `fmt::v8::detail::throw_format_error(char const*)'
+/usr/bin/ld: CMakeFiles/ChatServer.dir/chatserver.cpp.o: in function `fmt::v8::appender fmt::v8::detail::write<char, fmt::v8::appender, float, 0>(fmt::v8::appender, float, fmt::v8::basic_format_specs<char>, fmt::v8::detail::locale_ref)':
+chatserver.cpp:(.text._ZN3fmt2v86detail5writeIcNS0_8appenderEfLi0EEET0_S4_T1_NS0_18basic_format_specsIT_EENS1_10locale_refE[_ZN3fmt2v86detail5writeIcNS0_8appenderEfLi0EEET0_S4_T1_NS0_18basic_format_specsIT_EENS1_10locale_refE]+0x150): undefined reference to `int fmt::v8::detail::format_float<double>(double, int, fmt::v8::detail::float_specs, fmt::v8::detail::buffer<char>&)'
+/usr/bin/ld: chatserver.cpp:(.text._ZN3fmt2v86detail5writeIcNS0_8appenderEfLi0EEET0_S4_T1_NS0_18basic_format_specsIT_EENS1_10locale_refE[_ZN3fmt2v86detail5writeIcNS0_8appenderEfLi0EEET0_S4_T1_NS0_18basic_format_specsIT_EENS1_10locale_refE]+0x336): undefined reference to `int fmt::v8::detail::snprintf_float<double>(double, int, fmt::v8::detail::float_specs, fmt::v8::detail::buffer<char>&)'
+/usr/bin/ld: chatserver.cpp:(.text._ZN3fmt2v86detail5writeIcNS0_8appenderEfLi0EEET0_S4_T1_NS0_18basic_format_specsIT_EENS1_10locale_refE[_ZN3fmt2v86detail5writeIcNS0_8appenderEfLi0EEET0_S4_T1_NS0_18basic_format_specsIT_EENS1_10locale_refE]+0x41e): undefined reference to `fmt::v8::detail::error_handler::on_error(char const*)'
+/usr/bin/ld: chatserver.cpp:(.text._ZN3fmt2v86detail5writeIcNS0_8appenderEfLi0EEET0_S4_T1_NS0_18basic_format_specsIT_EENS1_10locale_refE[_ZN3fmt2v86detail5writeIcNS0_8appenderEfLi0EEET0_S4_T1_NS0_18basic_format_specsIT_EENS1_10locale_refE]+0x434): undefined reference to `fmt::v8::detail::throw_format_error(char const*)'
+/usr/bin/ld: CMakeFiles/ChatServer.dir/chatserver.cpp.o: in function `fmt::v8::appender fmt::v8::detail::write<char, fmt::v8::appender, double, 0>(fmt::v8::appender, double, fmt::v8::basic_format_specs<char>, fmt::v8::detail::locale_ref)':
+chatserver.cpp:(.text._ZN3fmt2v86detail5writeIcNS0_8appenderEdLi0EEET0_S4_T1_NS0_18basic_format_specsIT_EENS1_10locale_refE[_ZN3fmt2v86detail5writeIcNS0_8appenderEdLi0EEET0_S4_T1_NS0_18basic_format_specsIT_EENS1_10locale_refE]+0x14c): undefined reference to `int fmt::v8::detail::format_float<double>(double, int, fmt::v8::detail::float_specs, fmt::v8::detail::buffer<char>&)'
+/usr/bin/ld: chatserver.cpp:(.text._ZN3fmt2v86detail5writeIcNS0_8appenderEdLi0EEET0_S4_T1_NS0_18basic_format_specsIT_EENS1_10locale_refE[_ZN3fmt2v86detail5writeIcNS0_8appenderEdLi0EEET0_S4_T1_NS0_18basic_format_specsIT_EENS1_10locale_refE]+0x332): undefined reference to `int fmt::v8::detail::snprintf_float<double>(double, int, fmt::v8::detail::float_specs, fmt::v8::detail::buffer<char>&)'
+/usr/bin/ld: chatserver.cpp:(.text._ZN3fmt2v86detail5writeIcNS0_8appenderEdLi0EEET0_S4_T1_NS0_18basic_format_specsIT_EENS1_10locale_refE[_ZN3fmt2v86detail5writeIcNS0_8appenderEdLi0EEET0_S4_T1_NS0_18basic_format_specsIT_EENS1_10locale_refE]+0x41e): undefined reference to `fmt::v8::detail::error_handler::on_error(char const*)'
+/usr/bin/ld: chatserver.cpp:(.text._ZN3fmt2v86detail5writeIcNS0_8appenderEdLi0EEET0_S4_T1_NS0_18basic_format_specsIT_EENS1_10locale_refE[_ZN3fmt2v86detail5writeIcNS0_8appenderEdLi0EEET0_S4_T1_NS0_18basic_format_specsIT_EENS1_10locale_refE]+0x434): undefined reference to `fmt::v8::detail::throw_format_error(char const*)'
+/usr/bin/ld: CMakeFiles/ChatServer.dir/chatserver.cpp.o: in function `fmt::v8::appender fmt::v8::detail::write_int_noinline<char, fmt::v8::appender, unsigned __int128>(fmt::v8::appender, fmt::v8::detail::write_int_arg<unsigned __int128>, fmt::v8::basic_format_specs<char> const&, fmt::v8::detail::locale_ref) [clone .isra.0]':
+chatserver.cpp:(.text._ZN3fmt2v86detail18write_int_noinlineIcNS0_8appenderEoEET0_S4_NS1_13write_int_argIT1_EERKNS0_18basic_format_specsIT_EENS1_10locale_refE.isra.0[_ZZN3fmt2v86detail10vformat_toIcEEvRNS1_6bufferIT_EENS0_17basic_string_viewIS4_EENS0_17basic_format_argsINS0_20basic_format_contextINSt11conditionalIXsrSt7is_sameINS0_13type_identityIS4_E4typeEcE5valueENS0_8appenderESt20back_insert_iteratorINS3_ISF_EEEE4typeESF_EEEENS1_10locale_refEEN14format_handler15on_format_specsEiPKcSS_]+0x8e8): undefined reference to `fmt::v8::detail::throw_format_error(char const*)'
+/usr/bin/ld: CMakeFiles/ChatServer.dir/chatserver.cpp.o: in function `fmt::v8::detail::vformat_to<char>(fmt::v8::detail::buffer<char>&, fmt::v8::basic_string_view<char>, fmt::v8::basic_format_args<fmt::v8::basic_format_context<std::conditional<std::is_same<fmt::v8::type_identity<char>::type, char>::value, fmt::v8::appender, std::back_insert_iterator<fmt::v8::detail::buffer<fmt::v8::type_identity<char>::type> > >::type, fmt::v8::type_identity<char>::type> >, fmt::v8::detail::locale_ref)::format_handler::on_format_specs(int, char const*, char const*)':
+chatserver.cpp:(.text._ZZN3fmt2v86detail10vformat_toIcEEvRNS1_6bufferIT_EENS0_17basic_string_viewIS4_EENS0_17basic_format_argsINS0_20basic_format_contextINSt11conditionalIXsrSt7is_sameINS0_13type_identityIS4_E4typeEcE5valueENS0_8appenderESt20back_insert_iteratorINS3_ISF_EEEE4typeESF_EEEENS1_10locale_refEEN14format_handler15on_format_specsEiPKcSS_[_ZZN3fmt2v86detail10vformat_toIcEEvRNS1_6bufferIT_EENS0_17basic_string_viewIS4_EENS0_17basic_format_argsINS0_20basic_format_contextINSt11conditionalIXsrSt7is_sameINS0_13type_identityIS4_E4typeEcE5valueENS0_8appenderESt20back_insert_iteratorINS3_ISF_EEEE4typeESF_EEEENS1_10locale_refEEN14format_handler15on_format_specsEiPKcSS_]+0x57): undefined reference to `fmt::v8::detail::error_handler::on_error(char const*)'
+/usr/bin/ld: chatserver.cpp:(.text._ZZN3fmt2v86detail10vformat_toIcEEvRNS1_6bufferIT_EENS0_17basic_string_viewIS4_EENS0_17basic_format_argsINS0_20basic_format_contextINSt11conditionalIXsrSt7is_sameINS0_13type_identityIS4_E4typeEcE5valueENS0_8appenderESt20back_insert_iteratorINS3_ISF_EEEE4typeESF_EEEENS1_10locale_refEEN14format_handler15on_format_specsEiPKcSS_[_ZZN3fmt2v86detail10vformat_toIcEEvRNS1_6bufferIT_EENS0_17basic_string_viewIS4_EENS0_17basic_format_argsINS0_20basic_format_contextINSt11conditionalIXsrSt7is_sameINS0_13type_identityIS4_E4typeEcE5valueENS0_8appenderESt20back_insert_iteratorINS3_ISF_EEEE4typeESF_EEEENS1_10locale_refEEN14format_handler15on_format_specsEiPKcSS_]+0x37b): undefined reference to `fmt::v8::detail::error_handler::on_error(char const*)'
+/usr/bin/ld: chatserver.cpp:(.text._ZZN3fmt2v86detail10vformat_toIcEEvRNS1_6bufferIT_EENS0_17basic_string_viewIS4_EENS0_17basic_format_argsINS0_20basic_format_contextINSt11conditionalIXsrSt7is_sameINS0_13type_identityIS4_E4typeEcE5valueENS0_8appenderESt20back_insert_iteratorINS3_ISF_EEEE4typeESF_EEEENS1_10locale_refEEN14format_handler15on_format_specsEiPKcSS_[_ZZN3fmt2v86detail10vformat_toIcEEvRNS1_6bufferIT_EENS0_17basic_string_viewIS4_EENS0_17basic_format_argsINS0_20basic_format_contextINSt11conditionalIXsrSt7is_sameINS0_13type_identityIS4_E4typeEcE5valueENS0_8appenderESt20back_insert_iteratorINS3_ISF_EEEE4typeESF_EEEENS1_10locale_refEEN14format_handler15on_format_specsEiPKcSS_]+0x40d): undefined reference to `fmt::v8::detail::error_handler::on_error(char const*)'
+/usr/bin/ld: chatserver.cpp:(.text._ZZN3fmt2v86detail10vformat_toIcEEvRNS1_6bufferIT_EENS0_17basic_string_viewIS4_EENS0_17basic_format_argsINS0_20basic_format_contextINSt11conditionalIXsrSt7is_sameINS0_13type_identityIS4_E4typeEcE5valueENS0_8appenderESt20back_insert_iteratorINS3_ISF_EEEE4typeESF_EEEENS1_10locale_refEEN14format_handler15on_format_specsEiPKcSS_[_ZZN3fmt2v86detail10vformat_toIcEEvRNS1_6bufferIT_EENS0_17basic_string_viewIS4_EENS0_17basic_format_argsINS0_20basic_format_contextINSt11conditionalIXsrSt7is_sameINS0_13type_identityIS4_E4typeEcE5valueENS0_8appenderESt20back_insert_iteratorINS3_ISF_EEEE4typeESF_EEEENS1_10locale_refEEN14format_handler15on_format_specsEiPKcSS_]+0x5bc): undefined reference to `fmt::v8::detail::error_handler::on_error(char const*)'
+/usr/bin/ld: chatserver.cpp:(.text._ZZN3fmt2v86detail10vformat_toIcEEvRNS1_6bufferIT_EENS0_17basic_string_viewIS4_EENS0_17basic_format_argsINS0_20basic_format_contextINSt11conditionalIXsrSt7is_sameINS0_13type_identityIS4_E4typeEcE5valueENS0_8appenderESt20back_insert_iteratorINS3_ISF_EEEE4typeESF_EEEENS1_10locale_refEEN14format_handler15on_format_specsEiPKcSS_[_ZZN3fmt2v86detail10vformat_toIcEEvRNS1_6bufferIT_EENS0_17basic_string_viewIS4_EENS0_17basic_format_argsINS0_20basic_format_contextINSt11conditionalIXsrSt7is_sameINS0_13type_identityIS4_E4typeEcE5valueENS0_8appenderESt20back_insert_iteratorINS3_ISF_EEEE4typeESF_EEEENS1_10locale_refEEN14format_handler15on_format_specsEiPKcSS_]+0xb78): undefined reference to `fmt::v8::detail::error_handler::on_error(char const*)'
+/usr/bin/ld: CMakeFiles/ChatServer.dir/chatserver.cpp.o:chatserver.cpp:(.text._ZZN3fmt2v86detail10vformat_toIcEEvRNS1_6bufferIT_EENS0_17basic_string_viewIS4_EENS0_17basic_format_argsINS0_20basic_format_contextINSt11conditionalIXsrSt7is_sameINS0_13type_identityIS4_E4typeEcE5valueENS0_8appenderESt20back_insert_iteratorINS3_ISF_EEEE4typeESF_EEEENS1_10locale_refEEN14format_handler15on_format_specsEiPKcSS_[_ZZN3fmt2v86detail10vformat_toIcEEvRNS1_6bufferIT_EENS0_17basic_string_viewIS4_EENS0_17basic_format_argsINS0_20basic_format_contextINSt11conditionalIXsrSt7is_sameINS0_13type_identityIS4_E4typeEcE5valueENS0_8appenderESt20back_insert_iteratorINS3_ISF_EEEE4typeESF_EEEENS1_10locale_refEEN14format_handler15on_format_specsEiPKcSS_]+0xc20): more undefined references to `fmt::v8::detail::error_handler::on_error(char const*)' follow
+/usr/bin/ld: CMakeFiles/ChatServer.dir/chatserver.cpp.o: in function `fmt::v8::detail::vformat_to<char>(fmt::v8::detail::buffer<char>&, fmt::v8::basic_string_view<char>, fmt::v8::basic_format_args<fmt::v8::basic_format_context<std::conditional<std::is_same<fmt::v8::type_identity<char>::type, char>::value, fmt::v8::appender, std::back_insert_iterator<fmt::v8::detail::buffer<fmt::v8::type_identity<char>::type> > >::type, fmt::v8::type_identity<char>::type> >, fmt::v8::detail::locale_ref)::format_handler::on_format_specs(int, char const*, char const*)':
+chatserver.cpp:(.text._ZZN3fmt2v86detail10vformat_toIcEEvRNS1_6bufferIT_EENS0_17basic_string_viewIS4_EENS0_17basic_format_argsINS0_20basic_format_contextINSt11conditionalIXsrSt7is_sameINS0_13type_identityIS4_E4typeEcE5valueENS0_8appenderESt20back_insert_iteratorINS3_ISF_EEEE4typeESF_EEEENS1_10locale_refEEN14format_handler15on_format_specsEiPKcSS_[_ZZN3fmt2v86detail10vformat_toIcEEvRNS1_6bufferIT_EENS0_17basic_string_viewIS4_EENS0_17basic_format_argsINS0_20basic_format_contextINSt11conditionalIXsrSt7is_sameINS0_13type_identityIS4_E4typeEcE5valueENS0_8appenderESt20back_insert_iteratorINS3_ISF_EEEE4typeESF_EEEENS1_10locale_refEEN14format_handler15on_format_specsEiPKcSS_]+0x1119): undefined reference to `fmt::v8::detail::throw_format_error(char const*)'
+/usr/bin/ld: chatserver.cpp:(.text._ZZN3fmt2v86detail10vformat_toIcEEvRNS1_6bufferIT_EENS0_17basic_string_viewIS4_EENS0_17basic_format_argsINS0_20basic_format_contextINSt11conditionalIXsrSt7is_sameINS0_13type_identityIS4_E4typeEcE5valueENS0_8appenderESt20back_insert_iteratorINS3_ISF_EEEE4typeESF_EEEENS1_10locale_refEEN14format_handler15on_format_specsEiPKcSS_[_ZZN3fmt2v86detail10vformat_toIcEEvRNS1_6bufferIT_EENS0_17basic_string_viewIS4_EENS0_17basic_format_argsINS0_20basic_format_contextINSt11conditionalIXsrSt7is_sameINS0_13type_identityIS4_E4typeEcE5valueENS0_8appenderESt20back_insert_iteratorINS3_ISF_EEEE4typeESF_EEEENS1_10locale_refEEN14format_handler15on_format_specsEiPKcSS_]+0x112d): undefined reference to `fmt::v8::detail::error_handler::on_error(char const*)'
+/usr/bin/ld: chatserver.cpp:(.text._ZZN3fmt2v86detail10vformat_toIcEEvRNS1_6bufferIT_EENS0_17basic_string_viewIS4_EENS0_17basic_format_argsINS0_20basic_format_contextINSt11conditionalIXsrSt7is_sameINS0_13type_identityIS4_E4typeEcE5valueENS0_8appenderESt20back_insert_iteratorINS3_ISF_EEEE4typeESF_EEEENS1_10locale_refEEN14format_handler15on_format_specsEiPKcSS_[_ZZN3fmt2v86detail10vformat_toIcEEvRNS1_6bufferIT_EENS0_17basic_string_viewIS4_EENS0_17basic_format_argsINS0_20basic_format_contextINSt11conditionalIXsrSt7is_sameINS0_13type_identityIS4_E4typeEcE5valueENS0_8appenderESt20back_insert_iteratorINS3_ISF_EEEE4typeESF_EEEENS1_10locale_refEEN14format_handler15on_format_specsEiPKcSS_]+0x113c): undefined reference to `fmt::v8::detail::error_handler::on_error(char const*)'
+/usr/bin/ld: chatserver.cpp:(.text._ZZN3fmt2v86detail10vformat_toIcEEvRNS1_6bufferIT_EENS0_17basic_string_viewIS4_EENS0_17basic_format_argsINS0_20basic_format_contextINSt11conditionalIXsrSt7is_sameINS0_13type_identityIS4_E4typeEcE5valueENS0_8appenderESt20back_insert_iteratorINS3_ISF_EEEE4typeESF_EEEENS1_10locale_refEEN14format_handler15on_format_specsEiPKcSS_[_ZZN3fmt2v86detail10vformat_toIcEEvRNS1_6bufferIT_EENS0_17basic_string_viewIS4_EENS0_17basic_format_argsINS0_20basic_format_contextINSt11conditionalIXsrSt7is_sameINS0_13type_identityIS4_E4typeEcE5valueENS0_8appenderESt20back_insert_iteratorINS3_ISF_EEEE4typeESF_EEEENS1_10locale_refEEN14format_handler15on_format_specsEiPKcSS_]+0x1150): undefined reference to `fmt::v8::detail::error_handler::on_error(char const*)'
+/usr/bin/ld: chatserver.cpp:(.text._ZZN3fmt2v86detail10vformat_toIcEEvRNS1_6bufferIT_EENS0_17basic_string_viewIS4_EENS0_17basic_format_argsINS0_20basic_format_contextINSt11conditionalIXsrSt7is_sameINS0_13type_identityIS4_E4typeEcE5valueENS0_8appenderESt20back_insert_iteratorINS3_ISF_EEEE4typeESF_EEEENS1_10locale_refEEN14format_handler15on_format_specsEiPKcSS_[_ZZN3fmt2v86detail10vformat_toIcEEvRNS1_6bufferIT_EENS0_17basic_string_viewIS4_EENS0_17basic_format_argsINS0_20basic_format_contextINSt11conditionalIXsrSt7is_sameINS0_13type_identityIS4_E4typeEcE5valueENS0_8appenderESt20back_insert_iteratorINS3_ISF_EEEE4typeESF_EEEENS1_10locale_refEEN14format_handler15on_format_specsEiPKcSS_]+0x1161): undefined reference to `fmt::v8::detail::error_handler::on_error(char const*)'
+/usr/bin/ld: chatserver.cpp:(.text._ZZN3fmt2v86detail10vformat_toIcEEvRNS1_6bufferIT_EENS0_17basic_string_viewIS4_EENS0_17basic_format_argsINS0_20basic_format_contextINSt11conditionalIXsrSt7is_sameINS0_13type_identityIS4_E4typeEcE5valueENS0_8appenderESt20back_insert_iteratorINS3_ISF_EEEE4typeESF_EEEENS1_10locale_refEEN14format_handler15on_format_specsEiPKcSS_[_ZZN3fmt2v86detail10vformat_toIcEEvRNS1_6bufferIT_EENS0_17basic_string_viewIS4_EENS0_17basic_format_argsINS0_20basic_format_contextINSt11conditionalIXsrSt7is_sameINS0_13type_identityIS4_E4typeEcE5valueENS0_8appenderESt20back_insert_iteratorINS3_ISF_EEEE4typeESF_EEEENS1_10locale_refEEN14format_handler15on_format_specsEiPKcSS_]+0x1172): undefined reference to `fmt::v8::detail::error_handler::on_error(char const*)'
+/usr/bin/ld: CMakeFiles/ChatServer.dir/chatserver.cpp.o:chatserver.cpp:(.text._ZN3fmt2v86detail23parse_replacement_fieldIcRZNS1_10vformat_toIcEEvRNS1_6bufferIT_EENS0_17basic_string_viewIS5_EENS0_17basic_format_argsINS0_20basic_format_contextINSt11conditionalIXsrSt7is_sameINS0_13type_identityIS5_E4typeEcE5valueENS0_8appenderESt20back_insert_iteratorINS4_ISG_EEEE4typeESG_EEEENS1_10locale_refEE14format_handlerEEPKS5_SU_SU_OT0_[_ZN3fmt2v86detail23parse_replacement_fieldIcRZNS1_10vformat_toIcEEvRNS1_6bufferIT_EENS0_17basic_string_viewIS5_EENS0_17basic_format_argsINS0_20basic_format_contextINSt11conditionalIXsrSt7is_sameINS0_13type_identityIS5_E4typeEcE5valueENS0_8appenderESt20back_insert_iteratorINS4_ISG_EEEE4typeESG_EEEENS1_10locale_refEE14format_handlerEEPKS5_SU_SU_OT0_]+0x190): more undefined references to `fmt::v8::detail::error_handler::on_error(char const*)' follow
+/usr/bin/ld: CMakeFiles/ChatServer.dir/chatserver.cpp.o: in function `void fmt::v8::detail::vformat_to<char>(fmt::v8::detail::buffer<char>&, fmt::v8::basic_string_view<char>, fmt::v8::basic_format_args<fmt::v8::basic_format_context<std::conditional<std::is_same<fmt::v8::type_identity<char>::type, char>::value, fmt::v8::appender, std::back_insert_iterator<fmt::v8::detail::buffer<fmt::v8::type_identity<char>::type> > >::type, fmt::v8::type_identity<char>::type> >, fmt::v8::detail::locale_ref)':
+chatserver.cpp:(.text._ZN3fmt2v86detail10vformat_toIcEEvRNS1_6bufferIT_EENS0_17basic_string_viewIS4_EENS0_17basic_format_argsINS0_20basic_format_contextINSt11conditionalIXsrSt7is_sameINS0_13type_identityIS4_E4typeEcE5valueENS0_8appenderESt20back_insert_iteratorINS3_ISF_EEEE4typeESF_EEEENS1_10locale_refE[_ZN3fmt2v86detail10vformat_toIcEEvRNS1_6bufferIT_EENS0_17basic_string_viewIS4_EENS0_17basic_format_argsINS0_20basic_format_contextINSt11conditionalIXsrSt7is_sameINS0_13type_identityIS4_E4typeEcE5valueENS0_8appenderESt20back_insert_iteratorINS3_ISF_EEEE4typeESF_EEEENS1_10locale_refE]+0xa64): undefined reference to `fmt::v8::detail::throw_format_error(char const*)'
+/usr/bin/ld: CMakeFiles/ChatServer.dir/util/logging.cpp.o: in function `spdlog::spdlog_ex::spdlog_ex(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, int)':
+logging.cpp:(.text._ZN6spdlog9spdlog_exC2ERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEi[_ZN6spdlog9spdlog_exC5ERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEi]+0x97): undefined reference to `fmt::v8::format_system_error(fmt::v8::detail::buffer<char>&, int, char const*)'
+/usr/bin/ld: CMakeFiles/ChatServer.dir/util/logging.cpp.o: in function `spdlog::sinks::rotating_file_sink<std::mutex>::rotate_()':
+logging.cpp:(.text._ZN6spdlog5sinks18rotating_file_sinkISt5mutexE7rotate_Ev[_ZN6spdlog5sinks18rotating_file_sinkISt5mutexE7rotate_Ev]+0x2cc): undefined reference to `fmt::v8::vformat[abi:cxx11](fmt::v8::basic_string_view<char>, fmt::v8::basic_format_args<fmt::v8::basic_format_context<fmt::v8::appender, char> >)'
+/usr/bin/ld: logging.cpp:(.text._ZN6spdlog5sinks18rotating_file_sinkISt5mutexE7rotate_Ev[_ZN6spdlog5sinks18rotating_file_sinkISt5mutexE7rotate_Ev]+0x623): undefined reference to `fmt::v8::vformat[abi:cxx11](fmt::v8::basic_string_view<char>, fmt::v8::basic_format_args<fmt::v8::basic_format_context<fmt::v8::appender, char> >)'
+collect2: error: ld returned 1 exit status
+make[2]: *** [src/server/CMakeFiles/ChatServer.dir/build.make:378: ../bin/ChatServer] Error 1
 make[1]: *** [CMakeFiles/Makefile2:113: src/server/CMakeFiles/ChatServer.dir/all] Error 2
 make: *** [Makefile:136: all] Error 2
 ERROR: Service 'chatserver' failed to build: The command '/bin/sh -c mkdir -p build && cd build     && cmake -DCMAKE_BUILD_TYPE=Release ..     && make -j$(nproc)' returned a non-zero code: 2

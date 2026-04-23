@@ -26,6 +26,7 @@ target_link_libraries(ChatServer
     ${PROTOBUF_LIBRARIES} 
     spdlog 
     ssl
+    fmt
 )
 
 install(TARGETS ChatServer DESTINATION bin)
