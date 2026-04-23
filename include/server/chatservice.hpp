@@ -12,7 +12,6 @@
 #include "usermodel.hpp"
 #include "offlinemessagemodel.hpp"
 #include "chat.pb.h"
-#include "error_code.h"
 
 namespace chat {
 

@@ -4,7 +4,7 @@
 
 using json = nlohmann::json;
 
-namespace chat {
+namespace chatserver {
 
 ErrorCodeManager::ErrorCodeManager() {
     initErrorMap();
@@ -142,4 +142,4 @@ std::string Result<T>::toJson() const {
     return j.dump();
 }
 
-} // namespace chat
+} // namespace chatserver
