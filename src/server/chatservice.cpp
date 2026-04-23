@@ -143,10 +143,10 @@ void ChatBusinessService::login(const string& conn_id, const ChatMessage& msg) {
         int id = request.user_id();
         string pwd = request.password();
 
-        User user = _userModel.query(id);
+        chatserver::User user = _userModel.query(id);
         if (user.getId() == id && _userModel.verifyPassword(id, pwd)) {
             if (user.getState() == "online") {
-                LOG_WARN << "User " << id << " already online";
+                LOG_WARN << "chatserver::User " << id << " already online";
                 
                 ChatMessage response;
                 response.set_version(1);
@@ -177,7 +177,7 @@ void ChatBusinessService::login(const string& conn_id, const ChatMessage& msg) {
                 user.setState("online");
                 _userModel.updateState(user);
 
-                LOG_INFO << "User " << id << " logged in";
+                LOG_INFO << "chatserver::User " << id << " logged in";
 
                 // 构造登录响应
                 ChatMessage response;
@@ -206,10 +206,10 @@ void ChatBusinessService::login(const string& conn_id, const ChatMessage& msg) {
                 }
 
                 // 加载好友列表
-                vector<User> userVec = _friendModel.query(id);
+                vector<chatserver::User> userVec = _friendModel.query(id);
                 if (!userVec.empty()) {
-                    for (User& u : userVec) {
-                        ::chat::User* friend_user = login_response.add_friends();
+                    for (chatserver::User& u : userVec) {
+                        ::chat::chatserver::User* friend_user = login_response.add_friends();
                         friend_user->set_id(u.getId());
                         friend_user->set_name(u.getName());
                         friend_user->set_state(u.getState() == "online" ? USER_STATE_ONLINE : USER_STATE_OFFLINE);
@@ -225,7 +225,7 @@ void ChatBusinessService::login(const string& conn_id, const ChatMessage& msg) {
                 }
             }
         } else {
-            LOG_WARN << "User " << id << " login failed: invalid id or password";
+            LOG_WARN << "chatserver::User " << id << " login failed: invalid id or password";
             
             ChatMessage response;
             response.set_version(1);
@@ -294,12 +294,12 @@ void ChatBusinessService::reg(const string& conn_id, const ChatMessage& msg) {
             return;
         }
 
-        User user;
+        chatserver::User user;
         user.setName(name);
         user.setPwd(pwd);
         bool state = _userModel.insert(user);
         if (state) {
-            LOG_INFO << "User " << user.getId() << " registered successfully";
+            LOG_INFO << "chatserver::User " << user.getId() << " registered successfully";
             
             ChatMessage response;
             response.set_version(1);
@@ -320,7 +320,7 @@ void ChatBusinessService::reg(const string& conn_id, const ChatMessage& msg) {
                 g_chat_server->sendResponse(conn_id, serialized);
             }
         } else {
-            LOG_WARN << "User registration failed";
+            LOG_WARN << "chatserver::User registration failed";
             
             ChatMessage response;
             response.set_version(1);
@@ -371,10 +371,10 @@ void ChatBusinessService::loginout(const string& conn_id, const ChatMessage& msg
             }
         }
 
-        User user(userid, "", "", "offline");
+        chatserver::User user(userid, "", "", "offline");
         _userModel.updateState(user);
 
-        LOG_INFO << "User " << userid << " logged out";
+        LOG_INFO << "chatserver::User " << userid << " logged out";
 
         ChatMessage response;
         response.set_version(1);
@@ -421,7 +421,7 @@ void ChatBusinessService::oneChat(const string& conn_id, const ChatMessage& msg)
             lock_guard<mutex> lock(_mutex);
             auto it = _userConnMap.find(toid);
             if (it != _userConnMap.end()) {
-                LOG_DEBUG << "User " << toid << " is online, sending message";
+                LOG_DEBUG << "chatserver::User " << toid << " is online, sending message";
                 
                 if (g_chat_server) {
                     string serialized;
@@ -489,7 +489,7 @@ void ChatBusinessService::addFriend(const string& conn_id, const ChatMessage& ms
         }
 
         _friendModel.insert(userid, friendid);
-        LOG_INFO << "User " << userid << " added friend " << friendid;
+        LOG_INFO << "chatserver::User " << userid << " added friend " << friendid;
 
         ChatMessage response;
         response.set_version(1);

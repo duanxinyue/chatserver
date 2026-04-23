@@ -18,10 +18,9 @@ Step 6/10 : WORKDIR /app
  ---> Using cache
  ---> 5cb05147cbaa
 Step 7/10 : COPY . .
- ---> Using cache
- ---> 5e9276c14e9e
+ ---> 8c4a9562519b
 Step 8/10 : RUN mkdir -p build && cd build     && cmake -DCMAKE_BUILD_TYPE=Release ..     && make -j$(nproc)
- ---> Running in e74c7857c9a7
+ ---> Running in c471bfc68f73
 -- The C compiler identification is GNU 11.4.0
 -- The CXX compiler identification is GNU 11.4.0
 -- Detecting C compiler ABI info
@@ -39,17 +38,17 @@ Step 8/10 : RUN mkdir -p build && cd build     && cmake -DCMAKE_BUILD_TYPE=Relea
 -- Generating done
 -- Build files have been written to: /app/build
 [  5%] Running cpp protocol buffer compiler on /app/proto/chat.proto
-[ 15%] Building CXX object src/server/CMakeFiles/ChatServer.dir/main.cpp.o
 [ 15%] Building CXX object src/server/CMakeFiles/ChatServer.dir/chatserver.cpp.o
-[ 25%] Building CXX object src/server/CMakeFiles/ChatServer.dir/db/mysql_pool.cpp.o
-[ 25%] Building CXX object src/server/CMakeFiles/ChatServer.dir/model/friendmodel.cpp.o
-[ 30%] Building CXX object src/server/CMakeFiles/ChatServer.dir/chatservice.cpp.o
-[ 35%] Building CXX object src/server/CMakeFiles/ChatServer.dir/model/offlinemessagemodel.cpp.o
+[ 15%] Building CXX object src/server/CMakeFiles/ChatServer.dir/chatservice.cpp.o
+[ 20%] Building CXX object src/server/CMakeFiles/ChatServer.dir/main.cpp.o
+[ 25%] Building CXX object src/server/CMakeFiles/ChatServer.dir/model/offlinemessagemodel.cpp.o
+[ 30%] Building CXX object src/server/CMakeFiles/ChatServer.dir/db/mysql_pool.cpp.o
+[ 35%] Building CXX object src/server/CMakeFiles/ChatServer.dir/model/friendmodel.cpp.o
 [ 40%] Building CXX object src/server/CMakeFiles/ChatServer.dir/model/usermodel.cpp.o
-[ 45%] Building CXX object src/server/CMakeFiles/ChatServer.dir/redis/redis.cpp.o
-[ 50%] Building CXX object src/server/CMakeFiles/ChatServer.dir/message/offline_message_manager.cpp.o
-[ 55%] Building CXX object src/server/CMakeFiles/ChatServer.dir/util/bcrypt.cpp.o
+[ 50%] Building CXX object src/server/CMakeFiles/ChatServer.dir/util/bcrypt.cpp.o
+[ 50%] Building CXX object src/server/CMakeFiles/ChatServer.dir/redis/redis.cpp.o
 [ 60%] Building CXX object src/server/CMakeFiles/ChatServer.dir/util/config.cpp.o
+[ 60%] Building CXX object src/server/CMakeFiles/ChatServer.dir/message/offline_message_manager.cpp.o
 [ 65%] Building CXX object src/server/CMakeFiles/ChatServer.dir/util/crypto.cpp.o
 [ 70%] Building CXX object src/server/CMakeFiles/ChatServer.dir/util/error_code.cpp.o
 /app/src/server/util/error_code.cpp:2:10: fatal error: json.hpp: No such file or directory
@@ -58,48 +57,17 @@ Step 8/10 : RUN mkdir -p build && cd build     && cmake -DCMAKE_BUILD_TYPE=Relea
 compilation terminated.
 make[2]: *** [src/server/CMakeFiles/ChatServer.dir/build.make:252: src/server/CMakeFiles/ChatServer.dir/util/error_code.cpp.o] Error 1
 make[2]: *** Waiting for unfinished jobs....
-/app/src/server/model/friendmodel.cpp: In member function 'bool FriendModel::insert(int, int)':
-/app/src/server/model/friendmodel.cpp:17:17: warning: unused variable 'sql' [-Wunused-variable]
-   17 |     const char* sql = "INSERT INTO friend(userid, friendid) VALUES(?, ?)";
-      |                 ^~~
-/app/src/server/model/friendmodel.cpp: In member function 'std::vector<User> FriendModel::query(int)':
-/app/src/server/model/friendmodel.cpp:61:17: warning: unused variable 'sql' [-Wunused-variable]
-   61 |     const char* sql = "SELECT a.id, a.name, a.state FROM user a INNER JOIN friend b ON b.friendid = a.id WHERE b.userid = ?";
-      |                 ^~~
-/app/src/server/model/friendmodel.cpp: In member function 'std::vector<User> FriendModel::queryFriendRequests(int)':
-/app/src/server/model/friendmodel.cpp:134:17: warning: unused variable 'sql' [-Wunused-variable]
-  134 |     const char* sql = "SELECT a.id, a.name, a.state FROM user a INNER JOIN friend_request b ON b.from_id = a.id WHERE b.to_id = ? AND b.status = 'pending'";
-      |                 ^~~
 /app/src/server/model/offlinemessagemodel.cpp: In member function 'void OfflineMsgModel::insert(int, std::string)':
 /app/src/server/model/offlinemessagemodel.cpp:17:17: warning: unused variable 'sql' [-Wunused-variable]
    17 |     const char* sql = "INSERT INTO offlinemessage(userid, message, is_read) VALUES(?, ?, 0)";
-      |                 ^~~
-/app/src/server/model/friendmodel.cpp: In member function 'bool FriendModel::remove(int, int)':
-/app/src/server/model/friendmodel.cpp:207:17: warning: unused variable 'sql' [-Wunused-variable]
-  207 |     const char* sql = "DELETE FROM friend WHERE userid = ? AND friendid = ?";
       |                 ^~~
 /app/src/server/model/offlinemessagemodel.cpp: In member function 'void OfflineMsgModel::remove(int)':
 /app/src/server/model/offlinemessagemodel.cpp:58:17: warning: unused variable 'sql' [-Wunused-variable]
    58 |     const char* sql = "DELETE FROM offlinemessage WHERE userid = ?";
       |                 ^~~
-/app/src/server/model/friendmodel.cpp: In member function 'bool FriendModel::sendFriendRequest(int, int)':
-/app/src/server/model/friendmodel.cpp:256:17: warning: unused variable 'sql' [-Wunused-variable]
-  256 |     const char* sql = "INSERT INTO friend_request(from_id, to_id, status) VALUES(?, ?, 'pending')";
-      |                 ^~~
-/app/src/server/model/friendmodel.cpp: In member function 'bool FriendModel::handleFriendRequest(int, bool)':
-/app/src/server/model/friendmodel.cpp:315:21: warning: unused variable 'insert_sql' [-Wunused-variable]
-  315 |         const char* insert_sql = "INSERT INTO friend(userid, friendid) VALUES(?, ?), (?, ?)";
-      |                     ^~~~~~~~~~
-/app/src/server/model/friendmodel.cpp:350:17: warning: unused variable 'update_sql' [-Wunused-variable]
-  350 |     const char* update_sql = "UPDATE friend_request SET status = ? WHERE id = ?";
-      |                 ^~~~~~~~~~
 /app/src/server/model/offlinemessagemodel.cpp: In member function 'std::vector<std::__cxx11::basic_string<char> > OfflineMsgModel::query(int)':
 /app/src/server/model/offlinemessagemodel.cpp:95:17: warning: unused variable 'sql' [-Wunused-variable]
    95 |     const char* sql = "SELECT message FROM offlinemessage WHERE userid = ?";
-      |                 ^~~
-/app/src/server/model/friendmodel.cpp: In member function 'bool FriendModel::getFriendRequest(int, int&, int&, std::string&)':
-/app/src/server/model/friendmodel.cpp:403:17: warning: unused variable 'sql' [-Wunused-variable]
-  403 |     const char* sql = "SELECT from_id, to_id, status FROM friend_request WHERE id = ?";
       |                 ^~~
 /app/src/server/model/offlinemessagemodel.cpp: In member function 'std::vector<OfflineMsg> OfflineMsgModel::queryBatch(int, int, int)':
 /app/src/server/model/offlinemessagemodel.cpp:155:17: warning: unused variable 'sql' [-Wunused-variable]
@@ -137,6 +105,37 @@ make[2]: *** Waiting for unfinished jobs....
 /app/src/server/model/usermodel.cpp:243:17: warning: unused variable 'sql' [-Wunused-variable]
   243 |     const char* sql = "SELECT state FROM user WHERE id = ?";
       |                 ^~~
+/app/src/server/model/friendmodel.cpp: In member function 'bool FriendModel::insert(int, int)':
+/app/src/server/model/friendmodel.cpp:17:17: warning: unused variable 'sql' [-Wunused-variable]
+   17 |     const char* sql = "INSERT INTO friend(userid, friendid) VALUES(?, ?)";
+      |                 ^~~
+/app/src/server/model/friendmodel.cpp: In member function 'std::vector<User> FriendModel::query(int)':
+/app/src/server/model/friendmodel.cpp:61:17: warning: unused variable 'sql' [-Wunused-variable]
+   61 |     const char* sql = "SELECT a.id, a.name, a.state FROM user a INNER JOIN friend b ON b.friendid = a.id WHERE b.userid = ?";
+      |                 ^~~
+/app/src/server/model/friendmodel.cpp: In member function 'std::vector<User> FriendModel::queryFriendRequests(int)':
+/app/src/server/model/friendmodel.cpp:134:17: warning: unused variable 'sql' [-Wunused-variable]
+  134 |     const char* sql = "SELECT a.id, a.name, a.state FROM user a INNER JOIN friend_request b ON b.from_id = a.id WHERE b.to_id = ? AND b.status = 'pending'";
+      |                 ^~~
+/app/src/server/model/friendmodel.cpp: In member function 'bool FriendModel::remove(int, int)':
+/app/src/server/model/friendmodel.cpp:207:17: warning: unused variable 'sql' [-Wunused-variable]
+  207 |     const char* sql = "DELETE FROM friend WHERE userid = ? AND friendid = ?";
+      |                 ^~~
+/app/src/server/model/friendmodel.cpp: In member function 'bool FriendModel::sendFriendRequest(int, int)':
+/app/src/server/model/friendmodel.cpp:256:17: warning: unused variable 'sql' [-Wunused-variable]
+  256 |     const char* sql = "INSERT INTO friend_request(from_id, to_id, status) VALUES(?, ?, 'pending')";
+      |                 ^~~
+/app/src/server/model/friendmodel.cpp: In member function 'bool FriendModel::handleFriendRequest(int, bool)':
+/app/src/server/model/friendmodel.cpp:315:21: warning: unused variable 'insert_sql' [-Wunused-variable]
+  315 |         const char* insert_sql = "INSERT INTO friend(userid, friendid) VALUES(?, ?), (?, ?)";
+      |                     ^~~~~~~~~~
+/app/src/server/model/friendmodel.cpp:350:17: warning: unused variable 'update_sql' [-Wunused-variable]
+  350 |     const char* update_sql = "UPDATE friend_request SET status = ? WHERE id = ?";
+      |                 ^~~~~~~~~~
+/app/src/server/model/friendmodel.cpp: In member function 'bool FriendModel::getFriendRequest(int, int&, int&, std::string&)':
+/app/src/server/model/friendmodel.cpp:403:17: warning: unused variable 'sql' [-Wunused-variable]
+  403 |     const char* sql = "SELECT from_id, to_id, status FROM friend_request WHERE id = ?";
+      |                 ^~~
 In file included from /app/include/server/chatservice.hpp:15,
                  from /app/src/server/chatservice.cpp:1:
 /app/include/server/error_code.h:9:12: error: scoped/unscoped mismatch in enum 'enum chat::ErrorCode'
@@ -153,26 +152,6 @@ In file included from /app/include/server/chatservice.hpp:15,
 /app/include/server/error_code.h:127:51: error: 'SYSTEM_ERROR' is not a member of 'chat::ErrorCode'
   127 |     Result() : _success(false), _error(ErrorCode::SYSTEM_ERROR) {}
       |                                                   ^~~~~~~~~~~~
-In file included from /app/src/server/chatservice.cpp:1:
-/app/include/server/chatservice.hpp: At global scope:
-/app/include/server/chatservice.hpp:25:7: error: redefinition of 'class chat::ChatService'
-   25 | class ChatService {
-      |       ^~~~~~~~~~~
-In file included from /app/include/server/chatservice.hpp:14,
-                 from /app/src/server/chatservice.cpp:1:
-/app/build/src/server/chat.pb.h:8290:7: note: previous definition of 'class chat::ChatService'
- 8290 | class ChatService : public ::PROTOBUF_NAMESPACE_ID::Service {
-      |       ^~~~~~~~~~~
-In file included from /app/include/server/chatservice.hpp:15,
-                 from /app/src/server/main.cpp:2:
-/app/include/server/error_code.h:9:12: error: scoped/unscoped mismatch in enum 'enum chat::ErrorCode'
-    9 | enum class ErrorCode {
-      |            ^~~~~~~~~
-In file included from /app/include/server/chatservice.hpp:14,
-                 from /app/src/server/main.cpp:2:
-/app/build/src/server/chat.pb.h:289:6: note: previous definition here
-  289 | enum ErrorCode : int {
-      |      ^~~~~~~~~
 In file included from /app/include/server/chatservice.hpp:15,
                  from /app/src/server/chatserver.cpp:2:
 /app/include/server/error_code.h:9:12: error: scoped/unscoped mismatch in enum 'enum chat::ErrorCode'
@@ -184,143 +163,137 @@ In file included from /app/include/server/chatservice.hpp:14,
   289 | enum ErrorCode : int {
       |      ^~~~~~~~~
 In file included from /app/include/server/chatservice.hpp:15,
-                 from /app/src/server/main.cpp:2:
+                 from /app/src/server/chatserver.cpp:2:
 /app/include/server/error_code.h: In constructor 'chat::Result<T>::Result()':
 /app/include/server/error_code.h:127:51: error: 'SYSTEM_ERROR' is not a member of 'chat::ErrorCode'
   127 |     Result() : _success(false), _error(ErrorCode::SYSTEM_ERROR) {}
       |                                                   ^~~~~~~~~~~~
-In file included from /app/src/server/main.cpp:2:
-/app/include/server/chatservice.hpp: At global scope:
-/app/include/server/chatservice.hpp:25:7: error: redefinition of 'class chat::ChatService'
-   25 | class ChatService {
-      |       ^~~~~~~~~~~
-In file included from /app/include/server/chatservice.hpp:14,
-                 from /app/src/server/main.cpp:2:
-/app/build/src/server/chat.pb.h:8290:7: note: previous definition of 'class chat::ChatService'
- 8290 | class ChatService : public ::PROTOBUF_NAMESPACE_ID::Service {
-      |       ^~~~~~~~~~~
 In file included from /app/include/server/chatservice.hpp:15,
-                 from /app/src/server/chatserver.cpp:2:
+                 from /app/src/server/main.cpp:2:
+/app/include/server/error_code.h:9:12: error: scoped/unscoped mismatch in enum 'enum chat::ErrorCode'
+    9 | enum class ErrorCode {
+      |            ^~~~~~~~~
+In file included from /app/include/server/chatservice.hpp:14,
+                 from /app/src/server/main.cpp:2:
+/app/build/src/server/chat.pb.h:289:6: note: previous definition here
+  289 | enum ErrorCode : int {
+      |      ^~~~~~~~~
+In file included from /app/include/server/chatservice.hpp:15,
+                 from /app/src/server/main.cpp:2:
 /app/include/server/error_code.h: In constructor 'chat::Result<T>::Result()':
 /app/include/server/error_code.h:127:51: error: 'SYSTEM_ERROR' is not a member of 'chat::ErrorCode'
   127 |     Result() : _success(false), _error(ErrorCode::SYSTEM_ERROR) {}
       |                                                   ^~~~~~~~~~~~
-In file included from /app/src/server/chatserver.cpp:2:
-/app/include/server/chatservice.hpp: At global scope:
-/app/include/server/chatservice.hpp:25:7: error: redefinition of 'class chat::ChatService'
-   25 | class ChatService {
-      |       ^~~~~~~~~~~
-In file included from /app/include/server/chatservice.hpp:14,
-                 from /app/src/server/chatserver.cpp:2:
-/app/build/src/server/chat.pb.h:8290:7: note: previous definition of 'class chat::ChatService'
- 8290 | class ChatService : public ::PROTOBUF_NAMESPACE_ID::Service {
-      |       ^~~~~~~~~~~
-/app/src/server/chatservice.cpp:34:14: error: no declaration matches 'chat::ChatService* chat::ChatService::instance()'
-   34 | ChatService* ChatService::instance() {
-      |              ^~~~~~~~~~~
-/app/src/server/chatservice.cpp:34:14: note: no functions named 'chat::ChatService* chat::ChatService::instance()'
-In file included from /app/include/server/chatservice.hpp:14,
-                 from /app/src/server/chatservice.cpp:1:
-/app/build/src/server/chat.pb.h:8290:7: note: 'class chat::ChatService' defined here
- 8290 | class ChatService : public ::PROTOBUF_NAMESPACE_ID::Service {
-      |       ^~~~~~~~~~~
-/app/src/server/chatservice.cpp:44:1: error: redefinition of 'chat::ChatService::ChatService()'
-   44 | ChatService::ChatService() {
-      | ^~~~~~~~~~~
-In file included from /app/include/server/chatservice.hpp:14,
-                 from /app/src/server/chatservice.cpp:1:
-/app/build/src/server/chat.pb.h:8293:10: note: 'chat::ChatService::ChatService()' previously defined here
- 8293 |   inline ChatService() {};
-      |          ^~~~~~~~~~~
-/app/src/server/chatservice.cpp:53:6: error: no declaration matches 'void chat::ChatService::initRedis(const string&, int)'
-   53 | void ChatService::initRedis(const std::string& host, int port) {
-      |      ^~~~~~~~~~~
-/app/src/server/chatservice.cpp:53:6: note: no functions named 'void chat::ChatService::initRedis(const string&, int)'
-In file included from /app/include/server/chatservice.hpp:14,
-                 from /app/src/server/chatservice.cpp:1:
-/app/build/src/server/chat.pb.h:8290:7: note: 'class chat::ChatService' defined here
- 8290 | class ChatService : public ::PROTOBUF_NAMESPACE_ID::Service {
-      |       ^~~~~~~~~~~
-/app/src/server/chatservice.cpp:65:6: error: no declaration matches 'void chat::ChatService::handleMessage(const string&, const chat::ChatMessage&)'
-   65 | void ChatService::handleMessage(const string& conn_id, const ChatMessage& msg) {
-      |      ^~~~~~~~~~~
-/app/src/server/chatservice.cpp:65:6: note: no functions named 'void chat::ChatService::handleMessage(const string&, const chat::ChatMessage&)'
-In file included from /app/include/server/chatservice.hpp:14,
-                 from /app/src/server/chatservice.cpp:1:
-/app/build/src/server/chat.pb.h:8290:7: note: 'class chat::ChatService' defined here
- 8290 | class ChatService : public ::PROTOBUF_NAMESPACE_ID::Service {
-      |       ^~~~~~~~~~~
-/app/src/server/chatservice.cpp:106:6: error: no declaration matches 'void chat::ChatService::sendMessageAck(const string&, uint64_t, int, const string&)'
-  106 | void ChatService::sendMessageAck(const string& conn_id, uint64_t msg_id, int error_code, const string& error_msg) {
-      |      ^~~~~~~~~~~
-/app/src/server/chatservice.cpp:106:6: note: no functions named 'void chat::ChatService::sendMessageAck(const string&, uint64_t, int, const string&)'
-In file included from /app/include/server/chatservice.hpp:14,
-                 from /app/src/server/chatservice.cpp:1:
-/app/build/src/server/chat.pb.h:8290:7: note: 'class chat::ChatService' defined here
- 8290 | class ChatService : public ::PROTOBUF_NAMESPACE_ID::Service {
-      |       ^~~~~~~~~~~
-/app/src/server/chatservice.cpp:135:6: error: no declaration matches 'void chat::ChatService::login(const string&, const chat::ChatMessage&)'
-  135 | void ChatService::login(const string& conn_id, const ChatMessage& msg) {
-      |      ^~~~~~~~~~~
-/app/src/server/chatservice.cpp:135:6: note: no functions named 'void chat::ChatService::login(const string&, const chat::ChatMessage&)'
-In file included from /app/include/server/chatservice.hpp:14,
-                 from /app/src/server/chatservice.cpp:1:
-/app/build/src/server/chat.pb.h:8290:7: note: 'class chat::ChatService' defined here
- 8290 | class ChatService : public ::PROTOBUF_NAMESPACE_ID::Service {
-      |       ^~~~~~~~~~~
-/app/src/server/chatservice.cpp:262:6: error: no declaration matches 'void chat::ChatService::reg(const string&, const chat::ChatMessage&)'
-  262 | void ChatService::reg(const string& conn_id, const ChatMessage& msg) {
-      |      ^~~~~~~~~~~
-/app/src/server/chatservice.cpp:262:6: note: no functions named 'void chat::ChatService::reg(const string&, const chat::ChatMessage&)'
-In file included from /app/include/server/chatservice.hpp:14,
-                 from /app/src/server/chatservice.cpp:1:
-/app/build/src/server/chat.pb.h:8290:7: note: 'class chat::ChatService' defined here
- 8290 | class ChatService : public ::PROTOBUF_NAMESPACE_ID::Service {
-      |       ^~~~~~~~~~~
-/app/src/server/chatservice.cpp:356:6: error: no declaration matches 'void chat::ChatService::loginout(const string&, const chat::ChatMessage&)'
-  356 | void ChatService::loginout(const string& conn_id, const ChatMessage& msg) {
-      |      ^~~~~~~~~~~
-/app/src/server/chatservice.cpp:356:6: note: no functions named 'void chat::ChatService::loginout(const string&, const chat::ChatMessage&)'
-In file included from /app/include/server/chatservice.hpp:14,
-                 from /app/src/server/chatservice.cpp:1:
-/app/build/src/server/chat.pb.h:8290:7: note: 'class chat::ChatService' defined here
- 8290 | class ChatService : public ::PROTOBUF_NAMESPACE_ID::Service {
-      |       ^~~~~~~~~~~
-/app/src/server/chatservice.cpp:410:6: error: no declaration matches 'void chat::ChatService::oneChat(const string&, const chat::ChatMessage&)'
-  410 | void ChatService::oneChat(const string& conn_id, const ChatMessage& msg) {
-      |      ^~~~~~~~~~~
-/app/src/server/chatservice.cpp:410:6: note: no functions named 'void chat::ChatService::oneChat(const string&, const chat::ChatMessage&)'
-In file included from /app/include/server/chatservice.hpp:14,
-                 from /app/src/server/chatservice.cpp:1:
-/app/build/src/server/chat.pb.h:8290:7: note: 'class chat::ChatService' defined here
- 8290 | class ChatService : public ::PROTOBUF_NAMESPACE_ID::Service {
-      |       ^~~~~~~~~~~
-/app/src/server/chatservice.cpp:456:6: error: no declaration matches 'void chat::ChatService::addFriend(const string&, const chat::ChatMessage&)'
-  456 | void ChatService::addFriend(const string& conn_id, const ChatMessage& msg) {
-      |      ^~~~~~~~~~~
-/app/src/server/chatservice.cpp:456:6: note: no functions named 'void chat::ChatService::addFriend(const string&, const chat::ChatMessage&)'
-In file included from /app/include/server/chatservice.hpp:14,
-                 from /app/src/server/chatservice.cpp:1:
-/app/build/src/server/chat.pb.h:8290:7: note: 'class chat::ChatService' defined here
- 8290 | class ChatService : public ::PROTOBUF_NAMESPACE_ID::Service {
-      |       ^~~~~~~~~~~
-/app/src/server/chatservice.cpp:544:6: error: no declaration matches 'void chat::ChatService::handleHeartbeat(const string&, const chat::ChatMessage&)'
-  544 | void ChatService::handleHeartbeat(const string& conn_id, const ChatMessage& msg) {
-      |      ^~~~~~~~~~~
-/app/src/server/chatservice.cpp:544:6: note: no functions named 'void chat::ChatService::handleHeartbeat(const string&, const chat::ChatMessage&)'
-In file included from /app/include/server/chatservice.hpp:14,
-                 from /app/src/server/chatservice.cpp:1:
-/app/build/src/server/chat.pb.h:8290:7: note: 'class chat::ChatService' defined here
- 8290 | class ChatService : public ::PROTOBUF_NAMESPACE_ID::Service {
-      |       ^~~~~~~~~~~
-/app/src/server/main.cpp: In function 'int main(int, char**)':
-/app/src/server/main.cpp:52:24: error: 'instance' is not a member of 'chat::ChatService'
-   52 |     chat::ChatService::instance()->initRedis(redis_config.host, redis_config.port);
-      |                        ^~~~~~~~
-/app/src/server/chatserver.cpp: In member function 'void chat::ChatServer::onMessage(const string&, const string&)':
-/app/src/server/chatserver.cpp:163:22: error: 'instance' is not a member of 'chat::ChatService'
-  163 |         ChatService::instance()->handleMessage(conn_id, msg);
+/app/src/server/chatservice.cpp: In member function 'void chat::ChatBusinessService::login(const string&, const chat::ChatMessage&)':
+/app/src/server/chatservice.cpp:146:37: error: conversion from 'User' to non-scalar type 'chat::User' requested
+  146 |         User user = _userModel.query(id);
+      |                     ~~~~~~~~~~~~~~~~^~~~
+/app/src/server/chatservice.cpp:147:18: error: 'class chat::User' has no member named 'getId'
+  147 |         if (user.getId() == id && _userModel.verifyPassword(id, pwd)) {
+      |                  ^~~~~
+/app/src/server/chatservice.cpp:148:22: error: 'class chat::User' has no member named 'getState'; did you mean 'set_state'?
+  148 |             if (user.getState() == "online") {
       |                      ^~~~~~~~
+      |                      set_state
+/app/src/server/chatservice.cpp:160:81: error: 'USER_ALREADY_ONLINE' is not a member of 'chat::ErrorCode'
+  160 |                 login_response.set_error_code(static_cast<ErrorCode>(ErrorCode::USER_ALREADY_ONLINE));
+      |                                                                                 ^~~~~~~~~~~~~~~~~~~
+/app/src/server/chatservice.cpp:177:22: error: 'class chat::User' has no member named 'setState'; did you mean 'set_state'?
+  177 |                 user.setState("online");
+      |                      ^~~~~~~~
+      |                      set_state
+/app/src/server/chatservice.cpp:178:40: error: cannot convert 'chat::User' to 'User'
+  178 |                 _userModel.updateState(user);
+      |                                        ^~~~
+      |                                        |
+      |                                        chat::User
+In file included from /app/include/server/chatservice.hpp:12,
+                 from /app/src/server/chatservice.cpp:1:
+/app/include/server/model/usermodel.hpp:17:27: note:   initializing argument 1 of 'bool UserModel::updateState(User)'
+   17 |     bool updateState(User user);
+      |                      ~~~~~^~~~
+/app/src/server/chatservice.cpp:193:49: error: 'class chat::User' has no member named 'getId'
+  193 |                 login_response.set_user_id(user.getId());
+      |                                                 ^~~~~
+/app/src/server/chatservice.cpp:194:51: error: 'class chat::User' has no member named 'getName'
+  194 |                 login_response.set_user_name(user.getName());
+      |                                                   ^~~~~~~
+/app/src/server/chatservice.cpp:209:58: error: conversion from 'vector<User>' to non-scalar type 'vector<chat::User>' requested
+  209 |                 vector<User> userVec = _friendModel.query(id);
+      |                                        ~~~~~~~~~~~~~~~~~~^~~~
+/app/src/server/chatservice.cpp:213:47: error: 'class chat::User' has no member named 'getId'
+  213 |                         friend_user->set_id(u.getId());
+      |                                               ^~~~~
+/app/src/server/chatservice.cpp:214:49: error: 'class chat::User' has no member named 'getName'
+  214 |                         friend_user->set_name(u.getName());
+      |                                                 ^~~~~~~
+/app/src/server/chatservice.cpp:215:50: error: 'class chat::User' has no member named 'getState'; did you mean 'set_state'?
+  215 |                         friend_user->set_state(u.getState() == "online" ? USER_STATE_ONLINE : USER_STATE_OFFLINE);
+      |                                                  ^~~~~~~~
+      |                                                  set_state
+/app/src/server/chatservice.cpp:239:77: error: 'INVALID_USER_OR_PASSWORD' is not a member of 'chat::ErrorCode'
+  239 |             login_response.set_error_code(static_cast<ErrorCode>(ErrorCode::INVALID_USER_OR_PASSWORD));
+      |                                                                             ^~~~~~~~~~~~~~~~~~~~~~~~
+/app/src/server/chatservice.cpp: In member function 'void chat::ChatBusinessService::reg(const string&, const chat::ChatMessage&)':
+/app/src/server/chatservice.cpp:285:80: error: 'INVALID_PARAM' is not a member of 'chat::ErrorCode'
+  285 |             register_response.set_error_code(static_cast<ErrorCode>(ErrorCode::INVALID_PARAM));
+      |                                                                                ^~~~~~~~~~~~~
+/app/src/server/chatservice.cpp:298:14: error: 'class chat::User' has no member named 'setName'; did you mean 'set_name'?
+  298 |         user.setName(name);
+      |              ^~~~~~~
+      |              set_name
+/app/src/server/chatservice.cpp:299:14: error: 'class chat::User' has no member named 'setPwd'; did you mean 'set_id'?
+  299 |         user.setPwd(pwd);
+      |              ^~~~~~
+      |              set_id
+/app/src/server/chatservice.cpp:300:40: error: cannot convert 'chat::User' to 'User&'
+  300 |         bool state = _userModel.insert(user);
+      |                                        ^~~~
+      |                                        |
+      |                                        chat::User
+In file included from /app/include/server/chatservice.hpp:12,
+                 from /app/src/server/chatservice.cpp:1:
+/app/include/server/model/usermodel.hpp:11:23: note:   initializing argument 1 of 'bool UserModel::insert(User&)'
+   11 |     bool insert(User& user);
+      |                 ~~~~~~^~~~
+/app/src/server/chatservice.cpp:302:41: error: 'class chat::User' has no member named 'getId'
+  302 |             LOG_INFO << "User " << user.getId() << " registered successfully";
+      |                                         ^~~~~
+/app/src/server/chatservice.cpp:314:48: error: 'class chat::User' has no member named 'getId'
+  314 |             register_response.set_user_id(user.getId());
+      |                                                ^~~~~
+/app/src/server/chatservice.cpp: In member function 'void chat::ChatBusinessService::loginout(const string&, const chat::ChatMessage&)':
+/app/src/server/chatservice.cpp:374:44: error: no matching function for call to 'chat::User::User(int&, const char [1], const char [1], const char [8])'
+  374 |         User user(userid, "", "", "offline");
+      |                                            ^
+In file included from /app/include/server/chatservice.hpp:14,
+                 from /app/src/server/chatservice.cpp:1:
+/app/build/src/server/chat.pb.h:422:12: note: candidate: 'chat::User::User(google::protobuf::Arena*)'
+  422 |   explicit User(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+      |            ^~~~
+/app/build/src/server/chat.pb.h:422:12: note:   candidate expects 1 argument, 4 provided
+/app/build/src/server/chat.pb.h:336:3: note: candidate: 'chat::User::User(chat::User&&)'
+  336 |   User(User&& from) noexcept
+      |   ^~~~
+/app/build/src/server/chat.pb.h:336:3: note:   candidate expects 1 argument, 4 provided
+/app/build/src/server/chat.pb.h:335:3: note: candidate: 'chat::User::User(const chat::User&)'
+  335 |   User(const User& from);
+      |   ^~~~
+/app/build/src/server/chat.pb.h:335:3: note:   candidate expects 1 argument, 4 provided
+/app/build/src/server/chat.pb.h:332:10: note: candidate: 'chat::User::User()'
+  332 |   inline User() : User(nullptr) {};
+      |          ^~~~
+/app/build/src/server/chat.pb.h:332:10: note:   candidate expects 0 arguments, 4 provided
+/app/src/server/chatservice.cpp:375:32: error: cannot convert 'chat::User' to 'User'
+  375 |         _userModel.updateState(user);
+      |                                ^~~~
+      |                                |
+      |                                chat::User
+In file included from /app/include/server/chatservice.hpp:12,
+                 from /app/src/server/chatservice.cpp:1:
+/app/include/server/model/usermodel.hpp:17:27: note:   initializing argument 1 of 'bool UserModel::updateState(User)'
+   17 |     bool updateState(User user);
+      |                      ~~~~~^~~~
 make[2]: *** [src/server/CMakeFiles/ChatServer.dir/build.make:112: src/server/CMakeFiles/ChatServer.dir/main.cpp.o] Error 1
 make[2]: *** [src/server/CMakeFiles/ChatServer.dir/build.make:98: src/server/CMakeFiles/ChatServer.dir/chatservice.cpp.o] Error 1
 make[2]: *** [src/server/CMakeFiles/ChatServer.dir/build.make:84: src/server/CMakeFiles/ChatServer.dir/chatserver.cpp.o] Error 1

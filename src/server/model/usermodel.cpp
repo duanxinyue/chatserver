@@ -5,7 +5,7 @@
 using namespace std;
 using namespace chat::db;
 
-bool UserModel::insert(User& user) {
+bool UserModel::insert(chatserver::User& user) {
     MySQLPool& pool = MySQLPool::instance();
     MySQLConnectionGuard conn_guard(pool);
     MYSQL* conn = conn_guard.get();
@@ -62,18 +62,18 @@ bool UserModel::insert(User& user) {
     user.setId(mysql_stmt_insert_id(stmt));
     mysql_stmt_close(stmt);
     
-    LOG_INFO << "User " << user.getName() << " registered with id " << user.getId();
+    LOG_INFO << "chatserver::User " << user.getName() << " registered with id " << user.getId();
     return true;
 }
 
-User UserModel::query(int id) {
+chatserver::User UserModel::query(int id) {
     MySQLPool& pool = MySQLPool::instance();
     MySQLConnectionGuard conn_guard(pool);
     MYSQL* conn = conn_guard.get();
     
     if (!conn) {
         LOG_ERROR << "Failed to get MySQL connection";
-        return User();
+        return chatserver::User();
     }
     
     const char* sql = "SELECT id, name, password, state FROM user WHERE id = ?";
@@ -81,7 +81,7 @@ User UserModel::query(int id) {
     
     if (!stmt) {
         LOG_ERROR << "mysql_stmt_init failed: " << mysql_error(conn);
-        return User();
+        return chatserver::User();
     }
     
     MYSQL_BIND params[1];
@@ -93,13 +93,13 @@ User UserModel::query(int id) {
     if (mysql_stmt_bind_param(stmt, params) != 0) {
         LOG_ERROR << "mysql_stmt_bind_param failed: " << mysql_stmt_error(stmt);
         mysql_stmt_close(stmt);
-        return User();
+        return chatserver::User();
     }
     
     if (mysql_stmt_execute(stmt) != 0) {
         LOG_ERROR << "mysql_stmt_execute failed: " << mysql_stmt_error(stmt);
         mysql_stmt_close(stmt);
-        return User();
+        return chatserver::User();
     }
     
     // 绑定结果
@@ -129,10 +129,10 @@ User UserModel::query(int id) {
     if (mysql_stmt_bind_result(stmt, result) != 0) {
         LOG_ERROR << "mysql_stmt_bind_result failed: " << mysql_stmt_error(stmt);
         mysql_stmt_close(stmt);
-        return User();
+        return chatserver::User();
     }
     
-    User user;
+    chatserver::User user;
     if (mysql_stmt_fetch(stmt) == 0) {
         user.setId(result_id);
         user.setName(result_name);
@@ -144,7 +144,7 @@ User UserModel::query(int id) {
     return user;
 }
 
-bool UserModel::updateState(User user) {
+bool UserModel::updateState(chatserver::User user) {
     MySQLPool& pool = MySQLPool::instance();
     MySQLConnectionGuard conn_guard(pool);
     MYSQL* conn = conn_guard.get();
@@ -223,7 +223,7 @@ void UserModel::resetState() {
 }
 
 bool UserModel::verifyPassword(int id, const string& password) {
-    User user = query(id);
+    chatserver::User user = query(id);
     if (user.getId() == -1) {
         return false;
     }

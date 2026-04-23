@@ -109,7 +109,7 @@ void ChatServer::heartbeatCheckLoop() {
                 auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(
                     now - state.last_heartbeat).count();
                 if (elapsed > _config.heartbeat_timeout) {
-                    LOG_WARN << "User " << state.user_id << " heartbeat timeout, marking offline";
+                    LOG_WARN << "chatserver::User " << state.user_id << " heartbeat timeout, marking offline";
                     _user_conn_map.erase(state.user_id);
                     it = _conn_states.erase(it);
                     continue;

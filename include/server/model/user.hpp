@@ -4,6 +4,8 @@
 #include <string>
 using namespace std;
 
+namespace chatserver {
+
 // User表的ORM类
 class User
 {
@@ -32,5 +34,7 @@ protected:
     string password;
     string state;
 };
+
+} // namespace chatserver
 
 #endif

@@ -13,10 +13,10 @@ public:
     bool insert(int userid, int friendid);
 
     // 返回用户好友列表
-    std::vector<User> query(int userid);
+    std::vector<chatserver::User> query(int userid);
     
     // 获取好友请求列表（查询谁向我发送了好友请求）
-    std::vector<User> queryFriendRequests(int userid);
+    std::vector<chatserver::User> queryFriendRequests(int userid);
     
     // 删除好友关系
     bool remove(int userid, int friendid);

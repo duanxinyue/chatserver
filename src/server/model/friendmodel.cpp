@@ -48,7 +48,7 @@ bool FriendModel::insert(int userid, int friendid) {
     return true;
 }
 
-vector<User> FriendModel::query(int userid) {
+vector<chatserver::User> FriendModel::query(int userid) {
     MySQLPool& pool = MySQLPool::instance();
     MySQLConnectionGuard conn_guard(pool);
     MYSQL* conn = conn_guard.get();
@@ -108,9 +108,9 @@ vector<User> FriendModel::query(int userid) {
         return {};
     }
     
-    vector<User> vec;
+    vector<chatserver::User> vec;
     while (mysql_stmt_fetch(stmt) == 0) {
-        User user;
+        chatserver::User user;
         user.setId(id);
         user.setName(name);
         user.setState(state);
@@ -121,7 +121,7 @@ vector<User> FriendModel::query(int userid) {
     return vec;
 }
 
-vector<User> FriendModel::queryFriendRequests(int userid) {
+vector<chatserver::User> FriendModel::queryFriendRequests(int userid) {
     MySQLPool& pool = MySQLPool::instance();
     MySQLConnectionGuard conn_guard(pool);
     MYSQL* conn = conn_guard.get();
@@ -181,9 +181,9 @@ vector<User> FriendModel::queryFriendRequests(int userid) {
         return {};
     }
     
-    vector<User> vec;
+    vector<chatserver::User> vec;
     while (mysql_stmt_fetch(stmt) == 0) {
-        User user;
+        chatserver::User user;
         user.setId(id);
         user.setName(name);
         user.setState(state);
