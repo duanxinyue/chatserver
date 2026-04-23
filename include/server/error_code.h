@@ -4,7 +4,7 @@
 #include <string>
 #include <unordered_map>
 
-namespace chat {
+namespace chatserver {
 
 enum class ErrorCode {
     SUCCESS = 0,
@@ -143,6 +143,6 @@ private:
     std::string _detail;
 };
 
-} // namespace chat
+} // namespace chatserver
 
 #endif // ERROR_CODE_H

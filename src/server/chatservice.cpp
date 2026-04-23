@@ -157,7 +157,7 @@ void ChatBusinessService::login(const string& conn_id, const ChatMessage& msg) {
                 login_response.set_version(1);
                 login_response.set_msg_type(static_cast<MsgType>(LOGIN_MSG_ACK));
                 login_response.set_seq(msg.seq());
-                login_response.set_error_code(static_cast<ErrorCode>(ErrorCode::USER_ALREADY_ONLINE));
+                login_response.set_error_code(static_cast<chatserver::ErrorCode>(chatserver::ErrorCode::USER_ALREADY_ONLINE));
                 login_response.set_error_msg("this account is using, input another!");
                 response.set_allocated_login_response(new LoginResponse(login_response));
                 
@@ -189,7 +189,7 @@ void ChatBusinessService::login(const string& conn_id, const ChatMessage& msg) {
                 login_response.set_version(1);
                 login_response.set_msg_type(static_cast<MsgType>(LOGIN_MSG_ACK));
                 login_response.set_seq(msg.seq());
-                login_response.set_error_code(ErrorCode::ERROR_OK);
+                login_response.set_error_code(chatserver::ErrorCode::ERROR_OK);
                 login_response.set_user_id(user.getId());
                 login_response.set_user_name(user.getName());
 
@@ -209,7 +209,7 @@ void ChatBusinessService::login(const string& conn_id, const ChatMessage& msg) {
                 vector<chatserver::User> userVec = _friendModel.query(id);
                 if (!userVec.empty()) {
                     for (chatserver::User& u : userVec) {
-                        ::chat::chatserver::User* friend_user = login_response.add_friends();
+                        chat::User* friend_user = login_response.add_friends();
                         friend_user->set_id(u.getId());
                         friend_user->set_name(u.getName());
                         friend_user->set_state(u.getState() == "online" ? USER_STATE_ONLINE : USER_STATE_OFFLINE);
@@ -236,7 +236,7 @@ void ChatBusinessService::login(const string& conn_id, const ChatMessage& msg) {
             login_response.set_version(1);
             login_response.set_msg_type(static_cast<MsgType>(LOGIN_MSG_ACK));
             login_response.set_seq(msg.seq());
-            login_response.set_error_code(static_cast<ErrorCode>(ErrorCode::INVALID_USER_OR_PASSWORD));
+            login_response.set_error_code(static_cast<chatserver::ErrorCode>(chatserver::ErrorCode::INVALID_USER_OR_PASSWORD));
             login_response.set_error_msg("id or password is invalid!");
             response.set_allocated_login_response(new LoginResponse(login_response));
             
@@ -282,7 +282,7 @@ void ChatBusinessService::reg(const string& conn_id, const ChatMessage& msg) {
             register_response.set_version(1);
             register_response.set_msg_type(static_cast<MsgType>(REG_MSG_ACK));
             register_response.set_seq(msg.seq());
-            register_response.set_error_code(static_cast<ErrorCode>(ErrorCode::INVALID_PARAM));
+            register_response.set_error_code(static_cast<chatserver::ErrorCode>(chatserver::ErrorCode::INVALID_PARAM));
             register_response.set_error_msg("Name or password cannot be empty");
             response.set_allocated_register_response(new RegisterResponse(register_response));
             
@@ -310,7 +310,7 @@ void ChatBusinessService::reg(const string& conn_id, const ChatMessage& msg) {
             register_response.set_version(1);
             register_response.set_msg_type(static_cast<MsgType>(REG_MSG_ACK));
             register_response.set_seq(msg.seq());
-            register_response.set_error_code(ErrorCode::ERROR_OK);
+            register_response.set_error_code(chatserver::ErrorCode::ERROR_OK);
             register_response.set_user_id(user.getId());
             response.set_allocated_register_response(new RegisterResponse(register_response));
             
@@ -331,7 +331,7 @@ void ChatBusinessService::reg(const string& conn_id, const ChatMessage& msg) {
             register_response.set_version(1);
             register_response.set_msg_type(static_cast<MsgType>(REG_MSG_ACK));
             register_response.set_seq(msg.seq());
-            register_response.set_error_code(static_cast<ErrorCode>(ErrorCode::ERROR_SERVER_ERROR));
+            register_response.set_error_code(static_cast<chatserver::ErrorCode>(chatserver::ErrorCode::ERROR_SERVER_ERROR));
             response.set_allocated_register_response(new RegisterResponse(register_response));
             
             if (g_chat_server) {
@@ -443,7 +443,7 @@ void ChatBusinessService::oneChat(const string& conn_id, const ChatMessage& msg)
         sendMessageAck(conn_id, msg.seq(), 0, "Message saved");
     } catch (const exception& e) {
         LOG_ERROR << "ChatBusinessService::oneChat exception: " << e.what();
-        sendMessageAck(conn_id, 0, static_cast<int>(ErrorCode::ERROR_SERVER_ERROR), "System error");
+        sendMessageAck(conn_id, 0, static_cast<int>(chatserver::ErrorCode::ERROR_SERVER_ERROR), "System error");
     }
 }
 
@@ -561,7 +561,7 @@ void ChatBusinessService::handleHeartbeat(const string& conn_id, const ChatMessa
         heartbeat_response.set_version(1);
         heartbeat_response.set_msg_type(static_cast<MsgType>(HEARTBEAT_ACK));
         heartbeat_response.set_seq(msg.seq());
-        heartbeat_response.set_error_code(ErrorCode::ERROR_OK);
+        heartbeat_response.set_error_code(chatserver::ErrorCode::ERROR_OK);
         response.set_allocated_heartbeat_response(new HeartbeatResponse(heartbeat_response));
         
         if (g_chat_server) {

@@ -16,6 +16,7 @@ RUN apt-get update && apt-get install -y \
     libgmock-dev \
     openssl \
     libssl-dev \
+    nlohmann-json3-dev \
     && rm -rf /var/lib/apt/lists/*
 
 RUN cd /usr/src/googletest && \
