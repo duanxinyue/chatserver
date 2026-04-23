@@ -6,6 +6,7 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     cmake \
     git \
+    libboost-all-dev \
     libmysqlclient-dev \
     libhiredis-dev \
     libspdlog-dev \
