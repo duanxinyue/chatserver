@@ -49,7 +49,7 @@ int main(int argc, char** argv) {
     server_config.max_connections = config.get_server_config().max_connections;
 
     auto& redis_config = config.get_redis_config();
-    chat::ChatService::instance()->initRedis(redis_config.host, redis_config.port);
+    chat::ChatBusinessService::instance()->initRedis(redis_config.host, redis_config.port);
 
     std::unique_ptr<chat::ChatServer> server = std::make_unique<chat::ChatServer>();
     g_chat_server = server.get();

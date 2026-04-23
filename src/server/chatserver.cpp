@@ -136,7 +136,7 @@ void ChatServer::onConnection(const std::string& conn_id) {
 /**
  * @brief 处理收到的消息
  * 
- * 使用Protobuf解析消息，更新心跳时间，然后交给ChatService处理
+ * 使用Protobuf解析消息，更新心跳时间，然后交给ChatBusinessService处理
  * 
  * @param conn_id 连接ID
  * @param message 消息内容（Protobuf序列化数据）
@@ -160,7 +160,7 @@ void ChatServer::onMessage(const std::string& conn_id, const std::string& messag
         }
         
         // 交给业务层处理
-        ChatService::instance()->handleMessage(conn_id, msg);
+        ChatBusinessService::instance()->handleMessage(conn_id, msg);
         
     } catch (const std::exception& e) {
         LOG_ERROR << "Failed to process message from " << conn_id << ": " << e.what();

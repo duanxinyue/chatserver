@@ -22,13 +22,13 @@ namespace chat {
  * 处理所有业务逻辑，包括用户登录、注册、消息发送、好友管理等
  * 采用单例模式，确保全局只有一个实例
  */
-class ChatService {
+class ChatBusinessService {
 public:
     /**
      * @brief 获取单例实例
-     * @return ChatService* 单例指针
+     * @return ChatBusinessService* 单例指针
      */
-    static ChatService* instance();
+    static ChatBusinessService* instance();
     
     /**
      * @brief 初始化Redis连接
@@ -99,7 +99,7 @@ private:
     /**
      * @brief 私有构造函数（单例模式）
      */
-    ChatService();
+    ChatBusinessService();
     
     // 消息处理器类型定义
     using MsgHandler = std::function<void(const std::string&, const ChatMessage&)>;

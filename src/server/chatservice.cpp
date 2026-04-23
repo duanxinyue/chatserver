@@ -31,8 +31,8 @@ enum MsgType {
 /**
  * @brief 获取单例实例（懒汉模式，线程安全）
  */
-ChatService* ChatService::instance() {
-    static ChatService service;
+ChatBusinessService* ChatBusinessService::instance() {
+    static ChatBusinessService service;
     return &service;
 }
 
@@ -41,16 +41,16 @@ ChatService* ChatService::instance() {
  * 
  * 初始化消息处理器映射表，注册各种消息类型的处理函数
  */
-ChatService::ChatService() {
-    _msgHandlerMap.insert(std::make_pair(LOGIN_MSG, std::bind(&ChatService::login, this, std::placeholders::_1, std::placeholders::_2)));
-    _msgHandlerMap.insert(std::make_pair(LOGINOUT_MSG, std::bind(&ChatService::loginout, this, std::placeholders::_1, std::placeholders::_2)));
-    _msgHandlerMap.insert(std::make_pair(REG_MSG, std::bind(&ChatService::reg, this, std::placeholders::_1, std::placeholders::_2)));
-    _msgHandlerMap.insert(std::make_pair(ONE_CHAT_MSG, std::bind(&ChatService::oneChat, this, std::placeholders::_1, std::placeholders::_2)));
-    _msgHandlerMap.insert(std::make_pair(ADD_FRIEND_MSG, std::bind(&ChatService::addFriend, this, std::placeholders::_1, std::placeholders::_2)));
-    _msgHandlerMap.insert(std::make_pair(HEARTBEAT_MSG, std::bind(&ChatService::handleHeartbeat, this, std::placeholders::_1, std::placeholders::_2)));
+ChatBusinessService::ChatBusinessService() {
+    _msgHandlerMap.insert(std::make_pair(LOGIN_MSG, std::bind(&ChatBusinessService::login, this, std::placeholders::_1, std::placeholders::_2)));
+    _msgHandlerMap.insert(std::make_pair(LOGINOUT_MSG, std::bind(&ChatBusinessService::loginout, this, std::placeholders::_1, std::placeholders::_2)));
+    _msgHandlerMap.insert(std::make_pair(REG_MSG, std::bind(&ChatBusinessService::reg, this, std::placeholders::_1, std::placeholders::_2)));
+    _msgHandlerMap.insert(std::make_pair(ONE_CHAT_MSG, std::bind(&ChatBusinessService::oneChat, this, std::placeholders::_1, std::placeholders::_2)));
+    _msgHandlerMap.insert(std::make_pair(ADD_FRIEND_MSG, std::bind(&ChatBusinessService::addFriend, this, std::placeholders::_1, std::placeholders::_2)));
+    _msgHandlerMap.insert(std::make_pair(HEARTBEAT_MSG, std::bind(&ChatBusinessService::handleHeartbeat, this, std::placeholders::_1, std::placeholders::_2)));
 }
 
-void ChatService::initRedis(const std::string& host, int port) {
+void ChatBusinessService::initRedis(const std::string& host, int port) {
     _redis.connect(host, port);
 }
 
@@ -62,7 +62,7 @@ void ChatService::initRedis(const std::string& host, int port) {
  * @param conn_id 连接ID
  * @param msg Protobuf消息对象
  */
-void ChatService::handleMessage(const string& conn_id, const ChatMessage& msg) {
+void ChatBusinessService::handleMessage(const string& conn_id, const ChatMessage& msg) {
     try {
         int msgid = static_cast<int>(msg.msg_type());
         auto it = _msgHandlerMap.find(msgid);
@@ -91,7 +91,7 @@ void ChatService::handleMessage(const string& conn_id, const ChatMessage& msg) {
             }
         }
     } catch (const exception& e) {
-        LOG_ERROR << "ChatService::handleMessage exception: " << e.what();
+        LOG_ERROR << "ChatBusinessService::handleMessage exception: " << e.what();
     }
 }
 
@@ -103,7 +103,7 @@ void ChatService::handleMessage(const string& conn_id, const ChatMessage& msg) {
  * @param error_code 错误码
  * @param error_msg 错误信息
  */
-void ChatService::sendMessageAck(const string& conn_id, uint64_t msg_id, int error_code, const string& error_msg) {
+void ChatBusinessService::sendMessageAck(const string& conn_id, uint64_t msg_id, int error_code, const string& error_msg) {
     ChatMessage response;
     response.set_version(1);
     response.set_msg_type(static_cast<MsgType>(MSG_ACK));
@@ -132,7 +132,7 @@ void ChatService::sendMessageAck(const string& conn_id, uint64_t msg_id, int err
  * @param conn_id 连接ID
  * @param msg Protobuf消息对象
  */
-void ChatService::login(const string& conn_id, const ChatMessage& msg) {
+void ChatBusinessService::login(const string& conn_id, const ChatMessage& msg) {
     try {
         if (!msg.has_login_request()) {
             LOG_ERROR << "Login message without login_request";
@@ -247,7 +247,7 @@ void ChatService::login(const string& conn_id, const ChatMessage& msg) {
             }
         }
     } catch (const exception& e) {
-        LOG_ERROR << "ChatService::login exception: " << e.what();
+        LOG_ERROR << "ChatBusinessService::login exception: " << e.what();
     }
 }
 
@@ -259,7 +259,7 @@ void ChatService::login(const string& conn_id, const ChatMessage& msg) {
  * @param conn_id 连接ID
  * @param msg Protobuf消息对象
  */
-void ChatService::reg(const string& conn_id, const ChatMessage& msg) {
+void ChatBusinessService::reg(const string& conn_id, const ChatMessage& msg) {
     try {
         if (!msg.has_register_request()) {
             LOG_ERROR << "Register message without register_request";
@@ -341,7 +341,7 @@ void ChatService::reg(const string& conn_id, const ChatMessage& msg) {
             }
         }
     } catch (const exception& e) {
-        LOG_ERROR << "ChatService::reg exception: " << e.what();
+        LOG_ERROR << "ChatBusinessService::reg exception: " << e.what();
     }
 }
 
@@ -353,7 +353,7 @@ void ChatService::reg(const string& conn_id, const ChatMessage& msg) {
  * @param conn_id 连接ID
  * @param msg Protobuf消息对象
  */
-void ChatService::loginout(const string& conn_id, const ChatMessage& msg) {
+void ChatBusinessService::loginout(const string& conn_id, const ChatMessage& msg) {
     try {
         if (!msg.has_logout_request()) {
             LOG_ERROR << "Logout message without logout_request";
@@ -395,7 +395,7 @@ void ChatService::loginout(const string& conn_id, const ChatMessage& msg) {
             g_chat_server->sendResponse(conn_id, serialized);
         }
     } catch (const exception& e) {
-        LOG_ERROR << "ChatService::loginout exception: " << e.what();
+        LOG_ERROR << "ChatBusinessService::loginout exception: " << e.what();
     }
 }
 
@@ -407,7 +407,7 @@ void ChatService::loginout(const string& conn_id, const ChatMessage& msg) {
  * @param conn_id 连接ID
  * @param msg Protobuf消息对象
  */
-void ChatService::oneChat(const string& conn_id, const ChatMessage& msg) {
+void ChatBusinessService::oneChat(const string& conn_id, const ChatMessage& msg) {
     try {
         if (!msg.has_one_chat_request()) {
             LOG_ERROR << "OneChat message without one_chat_request";
@@ -442,7 +442,7 @@ void ChatService::oneChat(const string& conn_id, const ChatMessage& msg) {
         LOG_INFO << "Message to " << toid << " saved as offline message";
         sendMessageAck(conn_id, msg.seq(), 0, "Message saved");
     } catch (const exception& e) {
-        LOG_ERROR << "ChatService::oneChat exception: " << e.what();
+        LOG_ERROR << "ChatBusinessService::oneChat exception: " << e.what();
         sendMessageAck(conn_id, 0, static_cast<int>(ErrorCode::ERROR_SERVER_ERROR), "System error");
     }
 }
@@ -453,7 +453,7 @@ void ChatService::oneChat(const string& conn_id, const ChatMessage& msg) {
  * @param conn_id 连接ID
  * @param msg Protobuf消息对象
  */
-void ChatService::addFriend(const string& conn_id, const ChatMessage& msg) {
+void ChatBusinessService::addFriend(const string& conn_id, const ChatMessage& msg) {
     try {
         if (!msg.has_add_friend_request()) {
             LOG_ERROR << "AddFriend message without add_friend_request";
@@ -510,7 +510,7 @@ void ChatService::addFriend(const string& conn_id, const ChatMessage& msg) {
             g_chat_server->sendResponse(conn_id, serialized);
         }
     } catch (const exception& e) {
-        LOG_ERROR << "ChatService::addFriend exception: " << e.what();
+        LOG_ERROR << "ChatBusinessService::addFriend exception: " << e.what();
         
         ChatMessage response;
         response.set_version(1);
@@ -541,7 +541,7 @@ void ChatService::addFriend(const string& conn_id, const ChatMessage& msg) {
  * @param conn_id 连接ID
  * @param msg Protobuf消息对象
  */
-void ChatService::handleHeartbeat(const string& conn_id, const ChatMessage& msg) {
+void ChatBusinessService::handleHeartbeat(const string& conn_id, const ChatMessage& msg) {
     try {
         if (!msg.has_heartbeat_request()) {
             LOG_ERROR << "Heartbeat message without heartbeat_request";
@@ -570,6 +570,6 @@ void ChatService::handleHeartbeat(const string& conn_id, const ChatMessage& msg)
             g_chat_server->sendResponse(conn_id, serialized);
         }
     } catch (const exception& e) {
-        LOG_ERROR << "ChatService::handleHeartbeat exception: " << e.what();
+        LOG_ERROR << "ChatBusinessService::handleHeartbeat exception: " << e.what();
     }
 }
